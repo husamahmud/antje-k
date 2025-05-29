@@ -17,12 +17,12 @@ export const Header = () => {
   const pathname = usePathname()
 
   return (
-    <header className="container mx-auto flex items-center justify-between pt-10">
+    <header className="container px-3 mx-auto flex items-center justify-between pt-10">
       <p className="text-3xl text-[#1A1A1A]">Antje-k</p>
 
       <div className="font-dm-sans flex gap-14 text-xl font-light">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className={cn(
             "font-light",
             pathname === "/" && "font-medium"
@@ -30,8 +30,8 @@ export const Header = () => {
         >
           Home
         </Link>
-        <Link 
-          href="/about" 
+        <Link
+          href="/about"
           className={cn(
             "font-light",
             pathname === "/about" && "font-medium"
@@ -51,8 +51,8 @@ export const Header = () => {
             <DropdownMenuItem>Subscription</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Link 
-          href="/gallery" 
+        <Link
+          href="/gallery"
           className={cn(
             "font-light",
             pathname === "/gallery" && "font-medium"
