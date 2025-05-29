@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+
 import { Caveat, DM_Sans } from 'next/font/google'
 
 import { Header } from '@/components/header'
@@ -32,7 +33,7 @@ function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn('font-caveat flex min-h-svh min-w-svw flex-col antialiased bg-fixed', caveat.style, dmSans.style)}
+        className={cn('font-caveat flex min-h-svh min-w-svw flex-col bg-fixed antialiased', caveat.style, dmSans.style)}
         style={{ backgroundImage: `url('/bg.jpg')` }}
       >
         <Header />
