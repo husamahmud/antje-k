@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Navigation } from 'swiper/modules'
 
@@ -8,6 +8,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import Image from 'next/image'
+import { Lens } from '@/components/ui/lens'
 
 const images = [
   {
@@ -37,6 +38,8 @@ const images = [
 ]
 
 export default function Home() {
+  const [hovering, setHovering] = useState(false)
+
   return (
     <div className="relative container mx-auto flex h-full flex-1 items-center justify-center">
       <Swiper
@@ -68,7 +71,10 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="px-4">
+                <Lens
+                  hovering={hovering}
+                  setHovering={setHovering}
+                >
                   <Image
                     src={image.src}
                     alt={image.name}
@@ -76,7 +82,7 @@ export default function Home() {
                     height={540}
                     className="h-full w-full object-cover"
                   />
-                </div>
+                </Lens>
 
                 <div className="flex justify-end">
                   <p className="text-3xl text-[#828282]">{image.type}</p>
