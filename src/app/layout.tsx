@@ -33,6 +33,7 @@ export default function RootLayout({
         style={{ backgroundImage: `url('/bg.jpg')` }}
       >
         <Header />
+        {/* <div className="container mx-auto h-full flex-1 px-3">{children}</div> */}
         {children}
       </body>
     </html>
