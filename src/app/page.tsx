@@ -6,37 +6,11 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Navigation } from 'swiper/modules'
 
 import { Lens } from '@/components/ui/lens'
+import { images } from '@/images'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-
-const images = [
-  {
-    src: '/1.png',
-    name: 'Image 1',
-    size: [19.7, 7.9, 1.6],
-    type: 'Acrylic & Oil Pastel',
-  },
-  {
-    src: '/1.png',
-    name: 'Image 1',
-    size: [19.7, 7.9, 1.6],
-    type: 'Acrylic & Oil Pastel',
-  },
-  {
-    src: '/1.png',
-    name: 'Image 1',
-    size: [19.7, 7.9, 1.6],
-    type: 'Acrylic & Oil Pastel',
-  },
-  {
-    src: '/1.png',
-    name: 'Image 1',
-    size: [19.7, 7.9, 1.6],
-    type: 'Acrylic & Oil Pastel',
-  },
-]
 
 export default function Home() {
   const [hovering, setHovering] = useState(false)
