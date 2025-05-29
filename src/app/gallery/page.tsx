@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 const images = [
   '2.png',
+  '7.png',
   '3.png',
   '4.png',
   '5.png',
