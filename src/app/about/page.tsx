@@ -24,7 +24,7 @@ const Page = () => {
 
       <a
         href="mailto:contact@antje-k.art"
-        className="pb-5 font-light text-[#828282] underline"
+        className="font-source-serif pb-5 font-light text-[#828282] underline"
       >
         contact@antje-k.art
       </a>

@@ -1,6 +1,6 @@
 const Page = () => {
   return (
-    <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-5">
+    <div className="font-source-serif container mx-auto flex flex-1 flex-col items-center justify-center gap-5">
       <p className="text-[26px] text-[#151515]">Reach Out:</p>
 
       <a

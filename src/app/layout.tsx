@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { Caveat, DM_Sans } from 'next/font/google'
+import { Caveat, DM_Sans, Source_Serif_4 } from 'next/font/google'
 
 import { Header } from '@/components/header'
 
@@ -15,6 +15,11 @@ const caveat = Caveat({
 const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['300', '400', '500', '700'],
+})
+
+const sourceSerif4 = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -33,7 +38,12 @@ function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn('font-caveat flex min-h-svh min-w-svw flex-col bg-fixed antialiased', caveat.style, dmSans.style)}
+        className={cn(
+          'font-caveat flex min-h-svh min-w-svw flex-col bg-fixed antialiased',
+          caveat.style,
+          dmSans.style,
+          sourceSerif4.style
+        )}
         style={{ backgroundImage: `url('/bg.jpg')` }}
       >
         <Header />

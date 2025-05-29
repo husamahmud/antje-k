@@ -5,13 +5,13 @@ import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Navigation } from 'swiper/modules'
 
-import { Lens } from '@/components/ui/lens'
 import { images } from '@/images'
+import { Lens } from '@/components/ui/lens'
+import { Button } from '@/components/ui/button'
 
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import { Button } from '@/components/ui/button'
 
 export default function Home() {
   const [hovering, setHovering] = useState(false)
@@ -57,7 +57,7 @@ export default function Home() {
                       alt={image.name}
                       width={1067}
                       height={540}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359]"
                     />
                   </Lens>
 
@@ -95,13 +95,13 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col items-center gap-4 pb-5">
-        <Button className="cursor-pointer overflow-hidden rounded-full border-2 border-white/20 bg-[linear-gradient(107.8deg,#505050_3.37%,#1D1D1D_95.93%)] px-12 py-6 text-2xl text-[26px]">
+        <Button className="cursor-pointer font-source-serif overflow-hidden rounded-full border-2 border-white/20 bg-[linear-gradient(107.8deg,#505050_3.37%,#1D1D1D_95.93%)] px-12 py-6 text-[26px]">
           Buy now
         </Button>
 
         <a
           href="mailto:contact@antje-k.art"
-          className="font-light text-[#828282] underline"
+          className="font-light font-source-serif text-[#828282] underline"
         >
           contact@antje-k.art
         </a>

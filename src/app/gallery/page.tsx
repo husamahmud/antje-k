@@ -6,34 +6,25 @@ const images = [
   '4.png',
   '5.png',
   '6.png',
-  '6.png',
   '7.png',
-  '8.png',
   '8.png',
   '9.png',
-  '7.png',
-  '7.png',
   '8.png',
   '9.png',
 ]
 
 const Page = () => {
   return (
-    <div className="container mx-auto flex h-full flex-1 flex-wrap gap-8 px-3 py-20">
+    <div className="container mx-auto grid grid-cols-4 h-full flex-1 gap-x-8 gap-y-8 px-3 py-20">
       {images.map((image, index) => (
-        <div
-          className="min-w-0 flex-1"
-          style={{ flexBasis: 'calc(25% - 24px)' }}
+        <Image
           key={index}
-        >
-          <Image
-            src={`/gallery/${image}`}
-            alt="Gallery"
-            className="h-auto w-full object-cover"
-            width={360}
-            height={240}
-          />
-        </div>
+          src={`/gallery/${image}`}
+          alt="Gallery"
+          className="w-full h-fit object-cover my-auto object-center shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359]"
+          width={360}
+          height={240}
+        />
       ))}
     </div>
   )

@@ -6,6 +6,7 @@
 @theme {
   --font-caveat: 'Caveat', cursive;
   --font-dm-sans: 'DM Sans', sans-serif;
+  --font-source-serif: 'Source Serif 4', serif;
 }
 
 @theme inline {
@@ -121,6 +122,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
