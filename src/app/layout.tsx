@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Caveat, DM_Sans } from 'next/font/google'
 
+import { Header } from '@/components/header'
+
 import { cn } from '@/lib/utils'
 import './globals.css'
-import { Header } from '@/components/header'
 
 const caveat = Caveat({
   subsets: ['latin'],
