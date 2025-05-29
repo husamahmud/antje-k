@@ -1,4 +1,4 @@
-import Image from "next/image"
+import Image from 'next/image'
 
 const images = [
   '2.png',
@@ -19,14 +19,17 @@ const images = [
 
 const Page = () => {
   return (
-    <div className="container mx-auto flex flex-wrap gap-8 h-full flex-1 px-3 py-20">
+    <div className="container mx-auto flex h-full flex-1 flex-wrap gap-8 px-3 py-20">
       {images.map((image, index) => (
-        <div className="flex-1 min-w-0" style={{ flexBasis: 'calc(25% - 24px)' }}>
+        <div
+          className="min-w-0 flex-1"
+          style={{ flexBasis: 'calc(25% - 24px)' }}
+          key={index}
+        >
           <Image
-            key={index}
             src={`/gallery/${image}`}
             alt="Gallery"
-            className="object-cover w-full h-auto"
+            className="h-auto w-full object-cover"
             width={360}
             height={240}
           />
