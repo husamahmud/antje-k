@@ -1,14 +1,15 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Navigation } from 'swiper/modules'
 
+import { Lens } from '@/components/ui/lens'
+
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import Image from 'next/image'
-import { Lens } from '@/components/ui/lens'
 
 const images = [
   {
@@ -67,7 +68,7 @@ export default function Home() {
                 <div className="flex items-center justify-between">
                   <p className="text-3xl font-semibold text-[#1F1E13]">{image.name}</p>
                   <p className="text-3xl text-[#1F1E13]">
-                    {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]} "
+                    {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]} &quot;
                   </p>
                 </div>
 
