@@ -44,7 +44,7 @@ function RootLayout({
           dmSans.style,
           sourceSerif4.style
         )}
-        style={{ backgroundImage: `url('/bg.jpg')` }}
+        style={{ backgroundImage: `url('/bg.jpg')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
       >
         <Header />
         {children}

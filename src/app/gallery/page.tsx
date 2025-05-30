@@ -16,7 +16,7 @@ const images = [
 
 const Page = () => {
   return (
-    <div className="container mx-auto grid grid-cols-4 h-full flex-1 gap-x-8 gap-y-8 px-3 py-20">
+    <div className="container h-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 flex-1 gap-8 px-3 py-10 sm:py-15 md:py-20">
       {images.map((image, index) => (
         <Image
           key={index}
