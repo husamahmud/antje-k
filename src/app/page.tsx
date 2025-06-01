@@ -37,7 +37,6 @@ export default function Home() {
           className="w-full max-w-[1200px] pb-16"
           slidesPerView={1.3}
           centeredSlides={true}
-          loop={true}
           speed={800}
           effect="coverflow"
           coverflowEffect={{
