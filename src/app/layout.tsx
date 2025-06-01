@@ -22,7 +22,7 @@ const sourceSerif4 = Source_Serif_4({
   weight: ['400', '600', '700'],
 })
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: {
     template: '%s | Antej-K',
     default: 'Antej-K',

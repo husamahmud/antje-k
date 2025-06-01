@@ -1,10 +1,12 @@
 'use client'
 
+import { motion } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Navigation } from 'swiper/modules'
 
+import { variants } from '@/lib/utils'
 import { images } from '@/images'
 import { Lens } from '@/components/ui/lens'
 import { Button } from '@/components/ui/button'
@@ -13,11 +15,19 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
+
 export default function Home() {
   const [hovering, setHovering] = useState(false)
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center">
+    <motion.main
+      variants={variants}
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      transition={{ type: 'linear' }}
+      className="flex flex-1 flex-col items-center justify-center"
+    >
       <div className="relative container mx-auto flex h-full flex-1 items-center justify-center">
         <Swiper
           pagination={{
@@ -106,7 +116,7 @@ export default function Home() {
           contact@antje-k.art
         </a>
       </div>
-    </div>
+    </motion.main>
   )
 }
 
