@@ -10,7 +10,7 @@ const TransitionContext = createContext<{
   setDirection: (direction: 'left' | 'right' | 'initial') => void
 }>({
   direction: 'initial',
-  setDirection: () => {}
+  setDirection: () => { }
 })
 
 // Define the route order for directional transitions
@@ -32,7 +32,7 @@ export const TransitionProvider = ({ children }: { children: React.ReactNode }) 
     if (previousPath !== pathname) {
       const prevIndex = routes.indexOf(previousPath)
       const currentIndex = routes.indexOf(pathname)
-      
+
       if (prevIndex !== -1 && currentIndex !== -1) {
         // Determine direction based on route order
         if (currentIndex > prevIndex) {
@@ -43,7 +43,7 @@ export const TransitionProvider = ({ children }: { children: React.ReactNode }) 
       } else {
         setDirection('right') // Default direction for unknown routes
       }
-      
+
       setPreviousPath(pathname)
     }
   }, [pathname, previousPath])
@@ -109,7 +109,7 @@ const getVariants = (direction: 'left' | 'right' | 'initial') => {
           }
         }
       }
-    
+
     case 'right':
       return {
         hidden: {
@@ -136,7 +136,7 @@ const getVariants = (direction: 'left' | 'right' | 'initial') => {
           }
         }
       }
-    
+
     case 'left':
       return {
         hidden: {
