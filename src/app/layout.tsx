@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Caveat, DM_Sans, Source_Serif_4 } from 'next/font/google'
 
 import { Header } from '@/components/header'
+import { TransitionProvider } from '@/components/transition'
 
 import { cn } from '@/lib/utils'
 import './globals.css'
@@ -43,8 +44,10 @@ function RootLayout({
         )}
         style={{ backgroundImage: `url('/bg.jpg')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
       >
-        <Header />
-        {children}
+        <TransitionProvider>
+          <Header />
+          {children}
+        </TransitionProvider>
       </body>
     </html>
   )
