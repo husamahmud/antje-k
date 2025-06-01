@@ -1,9 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import { motion } from 'motion/react'
+import { Transition } from '@/components/transition'
 
-import { variants } from '@/lib/utils'
 const images = [
   '2.png',
   '7.png',
@@ -20,14 +19,7 @@ const images = [
 
 const Page = () => {
   return (
-    <motion.main
-      variants={variants}
-      initial="hidden"
-      animate="enter"
-      exit="exit"
-      transition={{ type: 'linear' }}
-      className="container h-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 flex-1 gap-8 px-3 py-10 sm:py-15 md:py-20"
-    >
+    <Transition className="container h-fit mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 flex-1 gap-8 px-3 py-10 sm:py-15 md:py-20">
       {images.map((image, index) => (
         <Image
           key={index}
@@ -38,7 +30,7 @@ const Page = () => {
           height={240}
         />
       ))}
-    </motion.main>
+      </Transition>
   )
 }
 

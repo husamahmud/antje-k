@@ -1,18 +1,10 @@
 'use client'
 
-import { motion } from 'motion/react'
-import { variants } from '@/lib/utils'
+import { Transition } from '@/components/transition'
 
 const Page = () => {
   return (
-    <motion.main
-      variants={variants}
-      initial="hidden"
-      animate="enter"
-      exit="exit"
-      transition={{ type: 'linear' }}
-      className="container mx-auto flex flex-1 flex-col items-center justify-center gap-10 text-center"
-    >
+    <Transition className="container mx-auto flex flex-1 flex-col items-center justify-center gap-10 text-center">
       <div className="font-dm-sans flex max-w-7xl flex-1 flex-col justify-center text-3xl font-extralight">
         <p>
           Set against a tranquil light blue backdrop, cascading drips and delicate streaks of green, red, yellow,
@@ -40,7 +32,7 @@ const Page = () => {
       >
         contact@antje-k.art
       </a>
-    </motion.main>
+    </Transition>
   )
 }
 
