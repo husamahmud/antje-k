@@ -26,7 +26,7 @@ export default function Home() {
             clickable: true,
             bulletClass: "swiper-pagination-bullet-custom",
             bulletActiveClass: "swiper-pagination-bullet-active-custom",
-            renderBullet: (_index, className) => `<span class="${className}"></span>`,
+            renderBullet: (className) => `<span class="${className}"></span>`,
           }}
           navigation={{
             nextEl: ".swiper-button-next-custom",
@@ -63,7 +63,7 @@ export default function Home() {
           }}
         >
           <div className="w-full">
-            {images.map((image, index) => (
+            {images.map((image) => (
               <SwiperSlide
                 key={image.src}
                 className="overflow-auto overflow-y-hidden transition-all duration-500 ease-out"
