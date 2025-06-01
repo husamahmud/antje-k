@@ -1,4 +1,11 @@
-export const images = [
+export interface ImageData {
+  src: string
+  name: string
+  size: [number, number, number]
+  type: string
+}
+
+export const images: ImageData[] = [
   {
     src: '/1.png',
     name: 'Image 1',

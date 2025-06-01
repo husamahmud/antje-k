@@ -9,7 +9,6 @@ import { images } from "@/images"
 import { Lens } from "@/components/ui/lens"
 import { Button } from "@/components/ui/button"
 import { Transition } from "@/components/transition"
-
 import "swiper/css"
 import "swiper/css/pagination"
 import "swiper/css/navigation"
@@ -17,6 +16,7 @@ import "swiper/css/effect-coverflow"
 
 export default function Home() {
   const [hovering, setHovering] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   return (
     <Transition className="flex flex-1 flex-col items-center justify-center">
@@ -47,6 +47,7 @@ export default function Home() {
             modifier: 2,
             slideShadows: false,
           }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           breakpoints={{
             640: {
               slidesPerView: 1.1,
@@ -63,10 +64,10 @@ export default function Home() {
           }}
         >
           <div className="w-full">
-            {images.map((image) => (
+            {images.map((image, index) => (
               <SwiperSlide
                 key={image.src}
-                className="overflow-auto overflow-y-hidden transition-all duration-500 ease-out"
+                className="overflow-visible transition-all duration-500 ease-out"
               >
                 <div className="flex h-full w-full flex-col gap-8 transform transition-all duration-500 ease-out">
                   <div className="flex items-center justify-between opacity-90 transition-opacity duration-300">
@@ -76,16 +77,30 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div className="transform transition-all duration-500 ease-out hover:scale-[1.02]">
-                    <Lens hovering={hovering} setHovering={setHovering}>
-                      <Image
-                        src={image.src || "/placeholder.svg"}
-                        alt={image.name}
-                        width={1067}
-                        height={540}
-                        className="h-full w-full object-cover shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359] transition-all duration-500 ease-out"
-                      />
-                    </Lens>
+                  <div className="transform transition-all duration-500 ease-out hover:scale-[1.02] overflow-visible">
+                    <div className="relative overflow-visible">
+                      {/* Blurred background shadow with image colors - only for active slide */}
+                      {index === activeIndex && (
+                        <Image
+                          src={image.src || "/placeholder.svg"}
+                          alt=""
+                          width={1067}
+                          height={540}
+                          className="absolute top-4 left-4 h-full w-full object-cover blur-xl opacity-60 scale-105 transition-all duration-500 ease-out"
+                          style={{ filter: 'blur(20px) saturate(1.2)', zIndex: -1 }}
+                        />
+                      )}
+                      
+                      <Lens hovering={hovering} setHovering={setHovering}>
+                        <Image
+                          src={image.src || "/placeholder.svg"}
+                          alt={image.name}
+                          width={1067}
+                          height={540}
+                          className="relative h-full w-full object-cover shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359] transition-all duration-500 ease-out"
+                        />
+                      </Lens>
+                    </div>
                   </div>
 
                   <div className="flex justify-end opacity-90 transition-opacity duration-300">
