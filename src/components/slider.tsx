@@ -81,30 +81,33 @@ export function Slider({ images }: SliderProps) {
                   <div className="flex items-center justify-between opacity-90 transition-opacity duration-300">
                     <p className="text-3xl font-semibold text-[#1F1E13] transition-all duration-300">{image.name}</p>
                     <p className="text-3xl text-[#1F1E13] transition-all duration-300">
-                      {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]} "
+                      {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]} &quot;
                     </p>
                   </div>
 
                   <div className="transform overflow-visible transition-all duration-500 ease-out hover:scale-[1.02]">
-                    <div className="relative h-[600px] w-full overflow-visible flex justify-center items-center">
+                    <div className="relative flex h-[600px] w-full items-center justify-center overflow-visible">
                       {index === activeIndex && (
                         <Image
                           src={image.src || '/placeholder.svg'}
                           alt=""
                           width={1067}
                           height={540}
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[600px] max-w-full scale-105 opacity-60 blur-xl transition-all duration-500 ease-out object-contain"
+                          className="absolute top-1/2 left-1/2 max-h-[600px] max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out"
                           style={{ filter: 'blur(20px) saturate(1.2)', zIndex: 0 }}
                         />
                       )}
                       {index === activeIndex ? (
-                        <Lens hovering={hovering} setHovering={setHovering}>
+                        <Lens
+                          hovering={hovering}
+                          setHovering={setHovering}
+                        >
                           <Image
                             src={image.src || '/placeholder.svg'}
                             alt={image.name}
                             width={1067}
                             height={540}
-                            className="max-h-[600px] max-w-full drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out object-contain z-10"
+                            className="z-10 max-h-[600px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out"
                           />
                         </Lens>
                       ) : (
@@ -113,7 +116,7 @@ export function Slider({ images }: SliderProps) {
                           alt={image.name}
                           width={1067}
                           height={540}
-                          className="max-h-[600px] max-w-full drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out object-contain"
+                          className="max-h-[600px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out"
                         />
                       )}
                     </div>
