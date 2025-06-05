@@ -4,13 +4,16 @@ import { Transition } from '@/components/transition'
 
 const Page = () => {
   return (
-    <Transition className="container mx-auto flex flex-1 flex-col items-center justify-center gap-5">
-      <div className="font-source-serif">
-        <p className="text-[26px] text-[#151515]">Reach Out:</p>
+    <Transition className="container mx-auto flex flex-1 flex-col items-center justify-center gap-3 px-4 py-6 sm:gap-5 sm:px-6 md:px-8">
+      <div className="font-source-serif text-center">
+        {/* Mobile-first responsive text sizing */}
+        <p className="text-xl text-[#151515] sm:text-2xl md:text-[26px]">
+          Reach Out:
+        </p>
 
         <a
           href="mailto:contact@antje-k.art"
-          className="text-[26px] font-light text-[#151515] underline"
+          className="text-xl font-light text-[#151515] underline transition-colors duration-300 hover:text-[#828282] sm:text-2xl md:text-[26px]"
         >
           contact@antje-k.art
         </a>
