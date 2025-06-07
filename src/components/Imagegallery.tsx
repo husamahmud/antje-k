@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useState, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
-import { Transition } from '@/components/transition'
 
 export interface Image {
   id: number
@@ -136,8 +135,8 @@ const ImageGallery: React.FC<{ images: Image[] }> = ({ images }) => {
   const showModal = selectedImage && originRect && !isMobile
 
   return (
-    <div className="relative flex w-full flex-col items-center p-4">
-      <div className="relative grid h-full w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="flex w-full flex-col items-center p-4">
+      <div className=" grid h-full w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
             key={image.id}
