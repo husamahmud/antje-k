@@ -1,14 +1,49 @@
+import { join } from 'node:path'
+import { readdirSync } from 'node:fs'
 import ImageGallery from "../Imagegallery"
 
-const TestPage = () => {
-  return <ImageGallery
-    images={[
-      { id: 1, src: 'https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Mountains', description: '19 July 2024' },
-      { id: 2, src: 'https://images.pexels.com/photos/459203/pexels-photo-459203.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Bridge', description: '11 Nov 2022' },
-      { id: 3, src: 'https://images.pexels.com/photos/1766838/pexels-photo-1766838.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'River', description: '18 Oct 2023' },
-      { id: 4, src: 'https://images.pexels.com/photos/2108813/pexels-photo-2108813.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', alt: 'Forest', description: '22 Mar 2024' },
-    ]
-    } />
+type ImageData = {
+  id: number
+  src: string
+  name: string
+}
+
+// Server-side data fetching
+async function getImages(): Promise<ImageData[]> {
+  const imagesDir = join(process.cwd(), 'public', 'images')
+  const files = readdirSync(imagesDir).filter(
+    (file) => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg')
+  )
+
+  const images: ImageData[] = files
+    .map((file, index) => {
+      const nameWithoutExt = file.replace(/\.(png|jpg|jpeg)$/i, '')
+      const parts = nameWithoutExt.split('_')
+      const name = parts.length > 1 ? parts[1] : parts[0]
+      
+      return {
+        id: index + 1,
+        src: `/images/${file}`,
+        name: name.replace(/[-_]/g, ' '), 
+      }
+    })
+
+  return images
+}
+
+const TestPage = async () => {
+  const images = await getImages()
+
+  return (
+    <ImageGallery
+      images={images.map((image) => ({
+        id: image.id,
+        src: image.src,
+        alt: image.name,
+        description: image.name,
+      }))}
+    />
+  )
 };
 
 export default TestPage;
