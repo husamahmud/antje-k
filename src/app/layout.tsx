@@ -5,7 +5,7 @@ import { Caveat, DM_Sans, Source_Serif_4 } from 'next/font/google'
 import { Header } from '@/components/header'
 import { TransitionProvider } from '@/components/transition'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'  
 import './globals.css'
 
 const caveat = Caveat({
