@@ -14,6 +14,8 @@ export interface GalleryImage {
 }
 
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) {
@@ -22,6 +24,10 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     },
     [onClose]
   )
+
+  const handleLoad = useCallback(() => {
+    setIsLoading(false)
+  }, [])
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -71,12 +77,21 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.25, delay: 0.05 }}
           >
+            {isLoading && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center">
+                <div className="flex items-center space-x-3 text-zinc-100">
+                  <div className="w-6 h-6 border-2 border-gray-300 rounded-full animate-spin" />
+                  <span className="text-lg font-medium">Loading...</span>
+                </div>
+              </div>
+            )}
             <NextImage
               src={image.src}
               alt={image.alt}
               fill
               style={{ objectFit: 'contain' }}
               priority
+              onLoad={handleLoad}
             />
           </motion.div>
         </motion.div>
@@ -93,21 +108,21 @@ const ImageItem: React.FC<{
   isSelected: boolean
   onImageClick: (image: GalleryImage) => void
 }> = React.memo(({ image, isSelected, onImageClick }) => {
+
   const handleClick = useCallback(() => {
     onImageClick(image)
   }, [image, onImageClick])
 
   return (
     <motion.div
-      className={`group relative my-auto w-full cursor-pointer overflow-hidden shadow-lg ${
-        isSelected ? 'opacity-50' : 'opacity-100'
-      } transition-opacity duration-200`}
+      className={`group relative my-auto w-full cursor-pointer overflow-hidden shadow-lg ${isSelected ? 'opacity-50' : 'opacity-100'
+        } transition-opacity duration-200`}
       onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
     >
       <NextImage
-        src={image.src || '/placeholder.svg'}
+        src={image.src}
         alt={image.alt}
         className="h-auto w-full object-contain shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359] transition-opacity duration-200"
         width={0}
