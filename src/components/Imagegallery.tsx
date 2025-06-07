@@ -1,8 +1,10 @@
 'use client'
 
 import React, { useState, useCallback, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import NextImage from 'next/image'
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
+import { Transition } from './transition'
 
 export interface GalleryImage {
   id: number
@@ -40,43 +42,47 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     }
   }, [handleKeyDown])
 
-  return (
-    <div
-      className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-[#0000009e] backdrop-blur-md"
-      onClick={handleBackdropClick}
-      onTouchEnd={handleBackdropClick}
-    >
-      <div className="relative h-full max-h-[90vh] w-full max-w-4xl p-4">
-        <button
-          onClick={onClose}
-          className="bg-opacity-50 hover:bg-opacity-75 fixed top-4 right-4 z-20 cursor-pointer rounded-full bg-black p-3 text-white shadow-lg transition-colors"
-          aria-label="Close modal"
+  // Ensure we're on the client side before creating portal
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  return createPortal(
+    <AnimatePresence>
+      <motion.div
+        className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-[#0000009e] backdrop-blur-md"
+        onClick={handleBackdropClick}
+        onTouchEnd={handleBackdropClick}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+      >
+        <motion.div
+          className="relative h-full max-h-[90vh] w-full max-w-4xl p-4"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <motion.div
+            className="relative h-full w-full"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
           >
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-        <div className="relative h-full w-full">
-          <NextImage
-            src={image.src || '/placeholder.svg'}
-            alt={image.alt}
-            fill
-            style={{ objectFit: 'contain' }}
-            quality={100}
-            priority
-          />
-        </div>
-      </div>
-    </div>
+            <NextImage
+              src={image.src}
+              alt={image.alt}
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>,
+    document.body
   )
 })
 
@@ -143,7 +149,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
   }, [])
 
   return (
-    <div className="flex w-full flex-col items-center p-4">
+    <Transition className="flex w-full flex-col items-center p-4">
       <div className="grid h-full w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
@@ -160,7 +166,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
           onClose={handleCloseModal}
         />
       )}
-    </div>
+    </Transition>
   )
 }
 
