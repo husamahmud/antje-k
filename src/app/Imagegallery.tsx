@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
+import { Transition } from '@/components/transition'
 
 export interface Image {
   id: number
@@ -86,8 +87,7 @@ const ImageGallery: React.FC<{ images: Image[] }> = ({ images }) => {
   }
 
   return (
-    <div className={`relative flex w-full flex-col items-center p-4`}>
-      <div className="absolute inset-0 bg-[url('/path/to/noise-texture.png')] opacity-5 mix-blend-overlay"></div>
+    <Transition className="relative flex w-full flex-col items-center p-4">
       <div className="relative grid h-full w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <motion.div
@@ -99,7 +99,7 @@ const ImageGallery: React.FC<{ images: Image[] }> = ({ images }) => {
                 imageRefs.current.delete(image.id)
               }
             }}
-            className={`group relative h-64 w-full cursor-pointer overflow-hidden rounded-lg shadow-lg ${
+            className={`group relative my-auto w-full cursor-pointer overflow-hidden shadow-lg ${
               selectedImage?.id === image.id ? 'opacity-0' : 'opacity-100'
             } transition-opacity duration-300`}
             onClick={() => handleImageClick(image, imageRefs.current.get(image.id) || null)}
@@ -108,15 +108,15 @@ const ImageGallery: React.FC<{ images: Image[] }> = ({ images }) => {
             <Image
               src={image.src}
               alt={image.alt}
-              layout="fill"
-              objectFit="cover"
-              quality={75}
-              className="transition-opacity duration-300"
+              className="h-auto w-full object-contain shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359] transition-opacity duration-300"
+              width={0}
+              height={0}
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              style={{ width: '100%', height: 'auto' }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-70" />
             <div className="bg absolute bottom-4 left-4 text-lg text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <p className="font-semibold">{image.alt}</p>
-              <p className="text-sm font-normal">{image.description}</p>
+              <p className="font-semibold">{image.description}</p>
             </div>
           </motion.div>
         ))}
@@ -128,7 +128,7 @@ const ImageGallery: React.FC<{ images: Image[] }> = ({ images }) => {
           onClose={() => setSelectedImage(null)}
         />
       )}
-    </div>
+    </Transition>
   )
 }
 

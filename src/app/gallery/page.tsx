@@ -1,7 +1,6 @@
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
 import ImageGallery from '../Imagegallery'
-import { Transition } from '@/components/transition'
 
 type ImageData = {
   id: number
@@ -32,9 +31,7 @@ async function getImages(): Promise<ImageData[]> {
 }
 
 const TestPage = async () => {
-  let images = await getImages()
-
-  images = [...images, ...images]
+  const images = await getImages()
 
   return (
     <ImageGallery
