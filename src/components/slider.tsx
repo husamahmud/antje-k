@@ -86,14 +86,14 @@ export function Slider({ images }: SliderProps) {
                   </div>
 
                   <div className="transform overflow-visible transition-all duration-500 ease-out hover:scale-[1.02]">
-                    <div className="relative flex h-[600px] w-full items-center justify-center overflow-visible">
+                    <div className="relative flex h-[400px] w-full items-center justify-center overflow-visible md:h-[600px]">
                       {index === activeIndex && (
                         <Image
                           src={image.src || '/placeholder.svg'}
                           alt=""
                           width={1067}
                           height={540}
-                          className="absolute top-1/2 left-1/2 max-h-[600px] max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out"
+                          className="absolute top-1/2 left-1/2 max-h-[400px] max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out md:max-h-[600px]"
                           style={{ filter: 'blur(20px) saturate(1.2)', zIndex: 0 }}
                         />
                       )}
@@ -107,7 +107,7 @@ export function Slider({ images }: SliderProps) {
                             alt={image.name}
                             width={1067}
                             height={540}
-                            className="z-10 max-h-[600px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out"
+                            className="z-10 max-h-[400px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[600px]"
                           />
                         </Lens>
                       ) : (
@@ -116,7 +116,7 @@ export function Slider({ images }: SliderProps) {
                           alt={image.name}
                           width={1067}
                           height={540}
-                          className="max-h-[600px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out"
+                          className="max-h-[400px] max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[600px]"
                         />
                       )}
                     </div>
