@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import NextImage from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
 import { Transition } from './transition'
+import { Lens } from './ui/lens'
 
 export interface GalleryImage {
   id: number
@@ -15,15 +16,7 @@ export interface GalleryImage {
 
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
   const [isLoading, setIsLoading] = useState(true)
-
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) {
-        onClose()
-      }
-    },
-    [onClose]
-  )
+  const [hovering, setHovering] = useState(false)
 
   const handleLoad = useCallback(() => {
     setIsLoading(false)
@@ -57,8 +50,6 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     <AnimatePresence>
       <motion.div
         className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-[#0000009e] backdrop-blur-md"
-        onClick={handleBackdropClick}
-        onTouchEnd={handleBackdropClick}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -71,8 +62,29 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
         >
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute right-0 top-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:bg-black/70 hover:scale-110"
+            aria-label="Close modal"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
           <motion.div
-            className="relative h-full w-full"
+            className="relative h-full w-full p-10 flex items-center justify-center"
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.25, delay: 0.05 }}
@@ -85,14 +97,20 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 </div>
               </div>
             )}
-            <NextImage
-              src={image.src}
-              alt={image.alt}
-              fill
-              style={{ objectFit: 'contain' }}
-              priority
-              onLoad={handleLoad}
-            />
+            <Lens
+              hovering={hovering}
+              setHovering={setHovering}
+            >
+              <NextImage
+                src={image.src}
+                alt={image.alt}
+                width={800}
+                height={800}
+                className="max-h-full max-w-full object-cover"
+                priority
+                onLoad={handleLoad}
+              />
+            </Lens>
           </motion.div>
         </motion.div>
       </motion.div>
