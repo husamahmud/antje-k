@@ -7,27 +7,20 @@ const Page = () => {
     <Transition className="container mx-auto flex flex-1 flex-col items-center justify-center gap-6 px-4 py-6 sm:gap-10 sm:px-6 md:px-8">
       <div className="font-dm-sans flex max-w-4xl flex-1 flex-col justify-center text-center">
         {/* Mobile-first responsive text sizing */}
-        <div className="space-y-4 text-lg leading-relaxed font-extralight sm:space-y-6 sm:text-xl md:text-2xl lg:text-3xl">
+        <div className="space-y-5 text-lg leading-relaxed font-extralight sm:space-y-6 sm:text-xl md:text-2xl lg:text-3xl">
           <p>
-            Set against a tranquil light blue backdrop, cascading drips and delicate streaks of green, red, yellow,
-            orange, and pink create a rhythmic vertical flow—evoking the graceful descent of rain or even the pulse of a
-            heartbeat.
+            Antje was born in Bremen, Lower Saxony, Germany, only a brief trip away from the Northern Sea. As it is, she
+            came in touch early with the tide, endless horizons, fish and bad weather, all of which never lost their
+            fascination on her.
           </p>
-          
+
           <p>
-            The painting gives a sense of movement and fluidity, with the vertical lines resembling paint dripping down
-            the canvas.
+            Most of her paintings combine a base of flowing or dripping aleatory techniques, a nod to the landscape she
+            grew up in, with more traditional painting methods, oil pastel drawing or structural elements, sometimes
+            even collage, to create dimension.
           </p>
-          
-          <p>A perfect statement for collectors seeking art that resonates with emotional elegant complexity.</p>
-          
-          <div className="pt-8 sm:pt-12 md:pt-16 lg:pt-20">
-            <p>
-              Set against a tranquil light blue backdrop, cascading drips and delicate streaks of green, red, yellow,
-              orange, and pink create a rhythmic vertical flow—evoking the graceful descent of rain or even the pulse of a
-              heartbeat.
-            </p>
-          </div>
+
+          <p>She also dabbles in portraits once in a while, because people are fascinating.</p>
         </div>
       </div>
 
