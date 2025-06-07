@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
-import ImageGallery from '../Imagegallery'
+import ImageGallery from '../../components/Imagegallery'
 
 type ImageData = {
   id: number
