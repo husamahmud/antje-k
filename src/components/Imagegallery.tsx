@@ -108,6 +108,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 height={800}
                 className="max-h-full max-w-full object-cover"
                 priority
+                quality={50}
                 onLoad={handleLoad}
               />
             </Lens>
@@ -144,6 +145,7 @@ const ImageItem: React.FC<{
         height={300}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
+        quality={50}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-70" />
       <div className="absolute bottom-4 left-4 text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">

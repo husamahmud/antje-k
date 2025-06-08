@@ -10,10 +10,10 @@ const Page = () => {
         <p className="text-xl font-light text-[#151515] opacity-75 sm:text-2xl md:text-[26px]">Reach Out:</p>
 
         <a
-          href="mailto:contact@antje-k.art"
+          href="mailto:antkrueg@icloud.com"
           className="text-xl font-light text-[#151515] underline transition-colors duration-300 hover:text-[#828282] sm:text-2xl md:text-[26px]"
         >
-          contact@antje-k.art
+          antkrueg@icloud.com
         </a>
       </div>
     </Transition>

@@ -25,7 +25,8 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
   const isHovering = hovering !== undefined ? hovering : localIsHovering
   const setIsHovering = setHovering || setLocalIsHovering
 
-  const [mousePosition, setMousePosition] = useState({ x: 100, y: 100 })
+  // Initialize mouse position to the center of the container or default
+  const [mousePosition, setMousePosition] = useState({ x: lensSize / 2, y: lensSize / 2 })
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -48,12 +49,14 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
 
       <AnimatePresence>
         {isHovering && (
-          <div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.58 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.58 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          >
+            {/* The masked zoom content */}
+            <div
               className="absolute inset-0 overflow-hidden"
               style={{
                 maskImage: `radial-gradient(circle ${lensSize / 2}px at ${
@@ -75,8 +78,22 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
               >
                 {children}
               </div>
-            </motion.div>
-          </div>
+            </div>
+
+            {/* The border element */}
+            <div
+              className="pointer-events-none absolute shadow-2xl" // Prevent this div from capturing mouse events
+              style={{
+                width: lensSize,
+                height: lensSize,
+                borderRadius: '50%', // Make it circular
+                border: '2px solid #ffffff6b', // Add your desired border style here
+                top: mousePosition.y - lensSize / 2, // Position the center of the circle at the mouse Y
+                left: mousePosition.x - lensSize / 2, // Position the center of the circle at the mouse X
+                zIndex: 60, // Ensure border is above the masked content
+              }}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

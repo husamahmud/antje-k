@@ -25,10 +25,10 @@ const Page = () => {
       </div>
 
       <a
-        href="mailto:contact@antje-k.art"
+        href="mailto:antkrueg@icloud.com"
         className="font-source-serif pb-5 text-sm font-light text-[#828282] underline transition-colors duration-300 hover:text-[#1F1E13] sm:text-base md:text-lg"
       >
-        contact@antje-k.art
+        antkrueg@icloud.com
       </a>
     </Transition>
   )
