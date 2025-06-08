@@ -5,9 +5,9 @@ import { Transition } from '@/components/transition'
 const Page = () => {
   return (
     <Transition className="container mx-auto flex flex-1 flex-col items-center justify-center gap-6 px-4 py-6 sm:gap-10 sm:px-6 md:px-8">
-      <div className="font-dm-sans flex max-w-4xl flex-1 flex-col justify-center text-center">
+      <div className="font-dm-sans flex max-w-7xl flex-1 flex-col justify-center text-center">
         {/* Mobile-first responsive text sizing */}
-        <div className="space-y-5 text-lg leading-relaxed font-extralight sm:space-y-6 sm:text-xl md:text-2xl lg:text-3xl">
+        <div className="space-y-5 text-lg leading-relaxed font-extralight sm:space-y-11 sm:text-xl md:text-2xl lg:text-3xl">
           <p>
             Antje was born in Bremen, Lower Saxony, Germany, only a brief trip away from the Northern Sea. As it is, she
             came in touch early with the tide, endless horizons, fish and bad weather, all of which never lost their

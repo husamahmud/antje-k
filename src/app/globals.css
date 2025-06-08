@@ -82,6 +82,7 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+  --box-shadow-husam: var(--shadow-2xl);
 }
 
 .dark {
@@ -137,7 +138,7 @@
 .swiper-pagination-bullet-custom {
   width: 12px;
   height: 12px;
-  background: #D1D5DB;
+  background: #d1d5db;
   border-radius: 50%;
   opacity: 0.5;
   margin: 0 6px;
@@ -152,7 +153,7 @@
 }
 
 .swiper-pagination-bullet-active-custom {
-  background: #1F1E13 !important;
+  background: #1f1e13 !important;
   opacity: 1 !important;
   transform: scale(1.2);
   box-shadow: 0 2px 8px rgba(31, 30, 19, 0.3);

@@ -65,7 +65,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute right-0 top-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:bg-black/70 hover:scale-110"
+            className="absolute top-0 right-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/70"
             aria-label="Close modal"
           >
             <svg
@@ -84,7 +84,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
             </svg>
           </button>
           <motion.div
-            className="relative h-full w-full p-10 flex items-center justify-center"
+            className="relative flex h-full w-full items-center justify-center p-10"
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.25, delay: 0.05 }}
@@ -92,7 +92,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
             {isLoading && (
               <div className="absolute inset-0 z-20 flex items-center justify-center">
                 <div className="flex items-center space-x-3 text-zinc-100">
-                  <div className="w-6 h-6 border-2 border-gray-300 rounded-full animate-spin" />
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300" />
                   <span className="text-lg font-medium">Loading...</span>
                 </div>
               </div>
@@ -126,15 +126,13 @@ const ImageItem: React.FC<{
   isSelected: boolean
   onImageClick: (image: GalleryImage) => void
 }> = React.memo(({ image, isSelected, onImageClick }) => {
-
   const handleClick = useCallback(() => {
     onImageClick(image)
   }, [image, onImageClick])
 
   return (
     <motion.div
-      className={`group relative my-auto w-full cursor-pointer overflow-hidden shadow-lg ${isSelected ? 'opacity-50' : 'opacity-100'
-        } transition-opacity duration-200`}
+      className="group relative my-auto w-full cursor-pointer transition-opacity duration-200"
       onClick={handleClick}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.2 }}
@@ -142,10 +140,9 @@ const ImageItem: React.FC<{
       <NextImage
         src={image.src}
         alt={image.alt}
-        className="h-auto w-full object-contain shadow-[0px_2.14px_8.54px_0px_#0000004D,10.68px_10.68px_36.3px_0px_#00000026,0px_2.14px_7.47px_0px_#1F1E1359] transition-opacity duration-200"
-        width={0}
-        height={0}
-        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-200"
+        width={500}
+        height={300}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
       />
@@ -183,7 +180,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
 
   return (
     <Transition className="flex w-full flex-col items-center p-4">
-      <div className="grid h-full w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid h-full w-full grid-cols-1 gap-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
             key={image.id}

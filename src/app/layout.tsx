@@ -5,7 +5,7 @@ import { Caveat, DM_Sans, Source_Serif_4 } from 'next/font/google'
 import { Header } from '@/components/header'
 import { TransitionProvider } from '@/components/transition'
 
-import { cn } from '@/lib/utils'  
+import { cn } from '@/lib/utils'
 import './globals.css'
 
 const caveat = Caveat({
@@ -15,12 +15,12 @@ const caveat = Caveat({
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
+  weight: ['100', '200', '300', '400', '500', '700'],
 })
 
 const sourceSerif4 = Source_Serif_4({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['200', '300', '400', '600', '700'],
 })
 
 export const metadata: Metadata = {
