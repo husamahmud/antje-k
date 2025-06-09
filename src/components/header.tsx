@@ -21,9 +21,9 @@ export const Header = () => {
     <header className="container mx-auto px-3 pt-6 sm:pt-8 md:pt-10">
       {/* Desktop Navigation */}
       <div className="hidden items-center justify-between sm:flex">
-        <p className="text-2xl font-medium text-[#1A1A1A] sm:text-3xl">Antje-k</p>
+        <p className="text-xl font-medium text-[#1A1A1A] sm:text-2xl">Antje-k</p>
 
-        <nav className="font-dm-sans flex gap-8 text-lg font-light sm:gap-10 md:gap-14 md:text-xl">
+        <nav className="font-dm-sans flex gap-8 font-light sm:gap-10 md:gap-14 md:text-xl">
           {navItems.map((item) => (
             <Link
               key={item.href}

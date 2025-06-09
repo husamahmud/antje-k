@@ -42,7 +42,7 @@ export function Slider({ images }: SliderProps) {
           }}
           modules={[Pagination, Navigation, EffectCoverflow]}
           spaceBetween={10}
-          className="w-full max-w-[1200px] pb-16"
+          className="w-full max-w-[1100px] pb-16"
           slidesPerView={1.3}
           centeredSlides={true}
           speed={800}
@@ -86,7 +86,7 @@ export function Slider({ images }: SliderProps) {
                   </div>
 
                   <div className="transform overflow-visible transition-all duration-500 ease-out hover:scale-[1.02]">
-                    <div className="relative mx-auto flex h-[400px] w-fit items-center justify-center overflow-visible md:h-[600px]">
+                    <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible md:h-[550]">
                       {index === activeIndex && (
                         <Image
                           src={image.src || '/placeholder.svg'}
@@ -94,7 +94,7 @@ export function Slider({ images }: SliderProps) {
                           width={1067}
                           height={540}
                           quality={50}
-                          className="absolute top-1/2 left-1/2 aspect-square max-h-[400px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out md:max-h-[600px]"
+                          className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out md:max-h-[550]"
                           style={{ filter: 'blur(20px) saturate(1.2)', zIndex: 0 }}
                         />
                       )}
@@ -109,7 +109,7 @@ export function Slider({ images }: SliderProps) {
                             width={1067}
                             quality={50}
                             height={540}
-                            className="z-10 aspect-square max-h-[400px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[600px]"
+                            className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[550]"
                           />
                         </Lens>
                       ) : (
@@ -119,7 +119,8 @@ export function Slider({ images }: SliderProps) {
                           width={1067}
                           quality={50}
                           height={540}
-                          className="aspect-square max-h-[400px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[600px]"
+                          className="aspect-square max-h-[350px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[550]"
+                          style={{ filter: 'blur(4px) saturate(1.2)' }}
                         />
                       )}
                     </div>
@@ -136,29 +137,27 @@ export function Slider({ images }: SliderProps) {
 
         <button
           type="button"
-          className={`swiper-button-next-custom absolute top-1/2 right-4 z-10 h-12 w-12 -translate-y-1/2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${
-            activeIndex >= images.length - 1 ? 'pointer-events-none opacity-25' : ''
-          }`}
+          className={`swiper-button-next-custom absolute top-1/2 right-4 z-10 size-10 -translate-y-1/2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${activeIndex >= images.length - 1 ? 'pointer-events-none opacity-25' : ''
+            }`}
         >
           <Image
             src="/arrow-right.svg"
             alt="arrow-right"
-            width={60}
-            height={60}
+            width={40}
+            height={40}
             className="transition-transform duration-300 ease-in-out"
           />
         </button>
         <button
           type="button"
-          className={`swiper-button-prev-custom absolute top-1/2 left-4 z-10 h-12 w-12 -translate-y-1/2 rotate-180 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${
-            activeIndex <= 0 ? 'pointer-events-none opacity-25' : ''
-          }`}
+          className={`swiper-button-prev-custom absolute top-1/2 left-4 z-10 h-12 w-12 -translate-y-1/2 rotate-180 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${activeIndex <= 0 ? 'pointer-events-none opacity-25' : ''
+            }`}
         >
           <Image
             src="/arrow-right.svg"
             alt="arrow-left"
-            width={60}
-            height={60}
+            width={40}
+            height={40}
             className="transition-transform duration-300 ease-in-out"
           />
         </button>

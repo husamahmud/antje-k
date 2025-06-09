@@ -11,7 +11,7 @@ const Page = () => {
 
         <a
           href="mailto:antkrueg@icloud.com"
-          className="text-xl font-light text-[#151515] underline transition-colors duration-300 hover:text-[#828282] sm:text-2xl md:text-[26px]"
+          className="text-xl font-medium text-[#151515] underline transition-colors duration-300 hover:text-[#828282] sm:text-2xl md:text-[26px]"
         >
           antkrueg@icloud.com
         </a>

@@ -12,6 +12,7 @@ export interface GalleryImage {
   src: string
   alt: string
   description: string
+  size: [number, number, number]
 }
 
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
@@ -56,7 +57,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
         transition={{ duration: 0.15 }}
       >
         <motion.div
-          className="relative h-full max-h-[90vh] w-full max-w-4xl p-4"
+          className="relative h-full max-h-[90%] w-full max-w-4xl p-4"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
@@ -106,7 +107,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 alt={image.alt}
                 width={800}
                 height={800}
-                className="max-h-full max-w-full object-cover"
+                className="max-h-[90vh] max-w-full object-contain"
                 priority
                 quality={50}
                 onLoad={handleLoad}
@@ -125,10 +126,13 @@ Modal.displayName = 'Modal'
 const ImageItem: React.FC<{
   image: GalleryImage
   onImageClick: (image: GalleryImage) => void
-}> = React.memo(({ image, onImageClick }) => {
+  size: [number, number, number]
+}> = React.memo(({ image, onImageClick, size }) => {
   const handleClick = useCallback(() => {
     onImageClick(image)
   }, [image, onImageClick])
+
+  console.log("Image size", size)
 
   return (
     <motion.div
@@ -148,8 +152,9 @@ const ImageItem: React.FC<{
         quality={50}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-70" />
-      <div className="absolute bottom-4 left-4 text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+      <div className="absolute bottom-4 left-1/2 flex w-full px-4 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
+        <p className="font-semibold">{image.size[0]}x{image.size[1]}x{image.size[2]}mm</p>
       </div>
     </motion.div>
   )
@@ -180,11 +185,12 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
   }, [])
 
   return (
-    <Transition className="flex w-full flex-col items-center p-10 md:p-20">
+    <Transition className="flex w-full flex-col items-center overflow-x-hidden p-10 md:p-20">
       <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
             key={image.id}
+            size={image.size}
             image={image}
             onImageClick={handleImageClick}
           />

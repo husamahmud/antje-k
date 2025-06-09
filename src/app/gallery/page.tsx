@@ -6,6 +6,7 @@ type ImageData = {
   id: number
   src: string
   name: string
+  size: [number, number, number]
 }
 
 // Server-side data fetching
@@ -15,17 +16,17 @@ async function getImages(): Promise<ImageData[]> {
     (file) => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.jpeg')
   )
 
-  const images: ImageData[] = files.map((file, index) => {
-    const nameWithoutExt = file.replace(/\.(png|jpg|jpeg)$/i, '')
-    const parts = nameWithoutExt.split('_')
-    const name = parts.length > 1 ? parts[1] : parts[0]
-
-    return {
-      id: index + 1,
-      src: `/images/${file}`,
-      name: name.replace(/[-_]/g, ' '),
-    }
-  })
+  const images: ImageData[] = files
+    .map((file, index) => {
+      const [, name, type, sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
+      const [width, height, depth] = sizeStr.split(',').map((num) => Number.parseFloat(num))
+      return {
+        id: index + 1,
+        src: `/images/${file}`,
+        name: name.replace(/[-_]/g, ' '),
+        size: [width, height, depth] as [number, number, number],
+      }
+    })
 
   return images
 }
@@ -40,6 +41,7 @@ const TestPage = async () => {
         src: image.src,
         alt: image.name,
         description: image.name,
+        size: image.size
       }))}
     />
   )
