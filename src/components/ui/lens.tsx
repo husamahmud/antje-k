@@ -38,7 +38,7 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
   return (
     <div
       ref={containerRef}
-      className="relative z-20 overflow-hidden"
+      className="relative z-20"
       onMouseEnter={() => {
         setIsHovering(true)
       }}
@@ -57,7 +57,7 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
           >
             {/* The masked zoom content */}
             <div
-              className="absolute inset-0 overflow-hidden"
+              className="absolute inset-0"
               style={{
                 maskImage: `radial-gradient(circle ${lensSize / 2}px at ${
                   mousePosition.x

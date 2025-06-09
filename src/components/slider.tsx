@@ -105,7 +105,7 @@ export function Slider({ images }: SliderProps) {
                           height={540}
                           quality={50}
                           className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all duration-500 ease-out md:max-h-[550]"
-                          style={{ filter: 'blur(22px) saturate(1.2)', zIndex: 0 }}
+                          style={{ filter: 'blur(10px) saturate(1.8)', zIndex: 0 }}
                         />
                       )}
                       {index === activeIndex ? (
