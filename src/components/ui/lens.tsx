@@ -53,7 +53,7 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
             initial={{ opacity: 1, scale: 0.58 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            transition={{ duration: 0, ease: 'easeOut' }}
           >
             {/* The masked zoom content */}
             <div
