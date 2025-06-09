@@ -18,7 +18,7 @@ async function getImages(): Promise<ImageData[]> {
 
   const images: ImageData[] = files
     .map((file, index) => {
-      const [, name, type, sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
+      const [, name, , sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
       const [width, height, depth] = sizeStr.split(',').map((num) => Number.parseFloat(num))
       return {
         id: index + 1,

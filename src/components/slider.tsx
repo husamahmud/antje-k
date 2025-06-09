@@ -1,14 +1,14 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Navigation, EffectCoverflow } from 'swiper/modules'
+import { Pagination, EffectCoverflow } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper'
 
 import { Lens } from '@/components/ui/lens'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import 'swiper/css/navigation'
 import 'swiper/css/effect-coverflow'
 
 type ImageData = {
@@ -25,10 +25,17 @@ type SliderProps = {
 export function Slider({ images }: SliderProps) {
   const [hovering, setHovering] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const swiperRef = useRef<SwiperType | null>(null)
+
+  const handleSlideClick = (index: number) => {
+    if (index !== activeIndex && swiperRef.current) {
+      swiperRef.current.slideTo(index)
+    }
+  }
 
   return (
     <>
-      <div className="relative container mx-auto flex h-full flex-1 items-center justify-center">
+      <div className="relative mx-auto flex h-full flex-1 items-center justify-center overflow-visible">
         <Swiper
           pagination={{
             clickable: true,
@@ -36,13 +43,9 @@ export function Slider({ images }: SliderProps) {
             bulletActiveClass: 'swiper-pagination-bullet-active-custom',
             renderBullet: (className) => `<span class="${className}"></span>`,
           }}
-          navigation={{
-            nextEl: '.swiper-button-next-custom',
-            prevEl: '.swiper-button-prev-custom',
-          }}
-          modules={[Pagination, Navigation, EffectCoverflow]}
+          modules={[Pagination, EffectCoverflow]}
           spaceBetween={10}
-          className="w-full max-w-[1100px] pb-16"
+          className="w-svw pb-16 overflow-visible"
           slidesPerView={1.3}
           centeredSlides={true}
           speed={800}
@@ -55,29 +58,36 @@ export function Slider({ images }: SliderProps) {
             slideShadows: false,
           }}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
           breakpoints={{
             640: {
               slidesPerView: 1.1,
-              spaceBetween: 40, // Increased space for breakpoint
+              spaceBetween: 40,
             },
             768: {
               slidesPerView: 1.2,
-              spaceBetween: 45, // Increased space for breakpoint
+              spaceBetween: 45,
             },
             1024: {
-              slidesPerView: 1.3,
-              spaceBetween: 40, // Increased space for breakpoint
+              slidesPerView: 2,
+              spaceBetween: 40,
             },
           }}
         >
-          <div className="w-full">
+          <div className="w-full overflow-visible">
             {images.map((image, index) => (
               <SwiperSlide
                 key={image.src}
                 className="mr-0 overflow-visible transition-all duration-500 ease-out"
+                onClick={() => handleSlideClick(index)}
+                style={{ cursor: index !== activeIndex ? 'pointer' : 'default' }}
               >
                 <div className="mx-auto flex h-full w-fit transform flex-col gap-8 overflow-visible transition-all duration-500 ease-out">
-                  <div className="flex items-center justify-between opacity-90 transition-opacity duration-300">
+                  <div className="flex items-center justify-between opacity-90 transition-opacity duration-300"
+                    style={{
+                      filter: index !== activeIndex ? 'blur(4px) saturate(1.2)' : 'none',
+                    }}
+                  >
                     <p className="text-3xl font-bold text-[#1F1E13] transition-all duration-300">{image.name}</p>
                     <p className="text-3xl font-light text-[#1F1E13] transition-all duration-300">
                       {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]}{' '}
@@ -86,7 +96,7 @@ export function Slider({ images }: SliderProps) {
                   </div>
 
                   <div className="transform overflow-visible transition-all duration-500 ease-out hover:scale-[1.02]">
-                    <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible md:h-[550]">
+                    <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible p-4 md:h-[550px] md:p-6">
                       {index === activeIndex && (
                         <Image
                           src={image.src || '/placeholder.svg'}
@@ -94,8 +104,8 @@ export function Slider({ images }: SliderProps) {
                           width={1067}
                           height={540}
                           quality={50}
-                          className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 scale-105 object-contain opacity-60 blur-xl transition-all duration-500 ease-out md:max-h-[550]"
-                          style={{ filter: 'blur(20px) saturate(1.2)', zIndex: 0 }}
+                          className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all duration-500 ease-out md:max-h-[550]"
+                          style={{ filter: 'blur(22px) saturate(1.2)', zIndex: 0 }}
                         />
                       )}
                       {index === activeIndex ? (
@@ -109,7 +119,7 @@ export function Slider({ images }: SliderProps) {
                             width={1067}
                             quality={50}
                             height={540}
-                            className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[550]"
+                            className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all duration-500 ease-out md:max-h-[550]"
                           />
                         </Lens>
                       ) : (
@@ -119,7 +129,7 @@ export function Slider({ images }: SliderProps) {
                           width={1067}
                           quality={50}
                           height={540}
-                          className="aspect-square max-h-[350px] w-fit max-w-full object-contain drop-shadow-[0px_2.14px_8.54px_rgba(0,0,0,0.3)] transition-all duration-500 ease-out md:max-h-[550]"
+                          className="aspect-square max-h-[350px] opacity-70 w-fit max-w-full object-contain transition-all duration-500 ease-out md:max-h-[550]"
                           style={{ filter: 'blur(4px) saturate(1.2)' }}
                         />
                       )}
@@ -127,40 +137,17 @@ export function Slider({ images }: SliderProps) {
                   </div>
 
                   <div className="flex justify-end opacity-90 transition-opacity duration-300">
-                    <p className="text-3xl font-light text-[#828282] transition-all duration-300">{image.type}</p>
+                    <p className="text-3xl font-light text-[#828282] transition-all duration-300"
+                      style={{
+                        filter: index !== activeIndex ? 'blur(4px) saturate(1.2)' : 'none',
+                      }}
+                    >{image.type}</p>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
           </div>
         </Swiper>
-
-        <button
-          type="button"
-          className={`swiper-button-next-custom absolute top-1/2 right-4 z-10 size-10 -translate-y-1/2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${activeIndex >= images.length - 1 ? 'pointer-events-none opacity-25' : ''
-            }`}
-        >
-          <Image
-            src="/arrow-right.svg"
-            alt="arrow-right"
-            width={40}
-            height={40}
-            className="transition-transform duration-300 ease-in-out"
-          />
-        </button>
-        <button
-          type="button"
-          className={`swiper-button-prev-custom absolute top-1/2 left-4 z-10 h-12 w-12 -translate-y-1/2 rotate-180 cursor-pointer transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-80 hover:drop-shadow-lg active:scale-95 ${activeIndex <= 0 ? 'pointer-events-none opacity-25' : ''
-            }`}
-        >
-          <Image
-            src="/arrow-right.svg"
-            alt="arrow-left"
-            width={40}
-            height={40}
-            className="transition-transform duration-300 ease-in-out"
-          />
-        </button>
       </div>
 
       <div className="flex flex-col items-center gap-4 pb-5">
