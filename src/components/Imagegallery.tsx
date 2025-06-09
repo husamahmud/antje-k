@@ -152,7 +152,7 @@ const ImageItem: React.FC<{
         quality={50}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-70" />
-      <div className="absolute bottom-4 left-1/2 flex w-full px-4 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+      <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
         <p className="font-semibold">{image.size[0]}x{image.size[1]}x{image.size[2]}mm</p>
       </div>
@@ -185,7 +185,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
   }, [])
 
   return (
-    <Transition className="flex w-full flex-col items-center max-w-svh p-10 md:p-20">
+    <Transition className="flex w-full flex-col max-w-svw items-center overflow-x-hidden p-10 md:p-20">
       <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
