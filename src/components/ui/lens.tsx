@@ -57,14 +57,12 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
           >
             {/* The masked zoom content */}
             <div
-              className="absolute inset-0"
+              className="absolute inset-0 hidden md:block"
               style={{
-                maskImage: `radial-gradient(circle ${lensSize / 2}px at ${
-                  mousePosition.x
-                }px ${mousePosition.y}px, black 100%, transparent 100%)`,
-                WebkitMaskImage: `radial-gradient(circle ${lensSize / 2}px at ${mousePosition.x}px ${
-                  mousePosition.y
-                }px, black 100%, transparent 100%)`,
+                maskImage: `radial-gradient(circle ${lensSize / 2}px at ${mousePosition.x
+                  }px ${mousePosition.y}px, black 100%, transparent 100%)`,
+                WebkitMaskImage: `radial-gradient(circle ${lensSize / 2}px at ${mousePosition.x}px ${mousePosition.y
+                  }px, black 100%, transparent 100%)`,
                 transformOrigin: `${mousePosition.x}px ${mousePosition.y}px`,
                 zIndex: 50,
               }}
@@ -82,7 +80,7 @@ export const Lens: React.FC<LensProps> = ({ children, zoomFactor = 1.5, lensSize
 
             {/* The border element */}
             <div
-              className="pointer-events-none absolute shadow-2xl" // Prevent this div from capturing mouse events
+              className="pointer-events-none absolute shadow-2xl hidden md:block" // Prevent this div from capturing mouse events
               style={{
                 width: lensSize,
                 height: lensSize,
