@@ -61,11 +61,11 @@ export function Slider({ images }: SliderProps) {
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           breakpoints={{
             640: {
-              slidesPerView: 1.1,
+              slidesPerView: 1.4,
               spaceBetween: 40,
             },
             768: {
-              slidesPerView: 1.2,
+              slidesPerView: 1.4,
               spaceBetween: 45,
             },
             1024: {
@@ -105,7 +105,7 @@ export function Slider({ images }: SliderProps) {
                           height={540}
                           quality={50}
                           className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all duration-500 ease-out md:max-h-[550]"
-                          style={{ filter: 'blur(10px) saturate(1.8)', zIndex: 0 }}
+                          style={{ filter: 'blur(15px) saturate(1.6)', zIndex: 0 }}
                         />
                       )}
                       {index === activeIndex ? (
