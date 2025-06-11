@@ -37,7 +37,7 @@ function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'font-caveat flex min-h-svh min-w-svw flex-col bg-fixed antialiased',
+          'font-caveat flex min-h-svh flex-col bg-fixed antialiased',
           caveat.style,
           dmSans.style,
           sourceSerif4.style

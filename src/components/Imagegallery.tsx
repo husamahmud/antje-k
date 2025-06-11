@@ -171,8 +171,6 @@ const ImageItem: React.FC<{
     onImageClick(image)
   }, [image, onImageClick])
 
-  console.log("Image size", size)
-
   return (
     <motion.div
       className="group relative my-auto w-full cursor-pointer transition-opacity duration-200"
@@ -224,7 +222,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
   }, [])
 
   return (
-    <Transition className="flex w-full flex-col max-w-svw items-center overflow-x-hidden p-10 md:p-14">
+    <Transition className="flex w-full flex-col items-center overflow-x-hidden p-10 md:p-14">
       <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
           <ImageItem
