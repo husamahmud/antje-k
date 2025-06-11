@@ -31,7 +31,7 @@ async function getImages(): Promise<ImageData[]> {
   return images
 }
 
-const TestPage = async () => {
+const Page = async () => {
   const images = await getImages()
 
   return (
@@ -47,4 +47,4 @@ const TestPage = async () => {
   )
 }
 
-export default TestPage
+export default Page
