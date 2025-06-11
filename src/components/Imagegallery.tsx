@@ -165,8 +165,7 @@ Modal.displayName = 'Modal'
 const ImageItem: React.FC<{
   image: GalleryImage
   onImageClick: (image: GalleryImage) => void
-  size: [number, number, number]
-}> = React.memo(({ image, onImageClick, size }) => {
+}> = React.memo(({ image, onImageClick }) => {
   const handleClick = useCallback(() => {
     onImageClick(image)
   }, [image, onImageClick])
@@ -227,7 +226,6 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
         {images.map((image) => (
           <ImageItem
             key={image.id}
-            size={image.size}
             image={image}
             onImageClick={handleImageClick}
           />
