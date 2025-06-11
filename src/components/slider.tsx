@@ -119,7 +119,7 @@ export function Slider({ images }: SliderProps) {
                             width={1067}
                             quality={50}
                             height={540}
-                            className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all duration-500 ease-out md:max-h-[550]"
+                            className="z-10 shadow-lg aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all duration-500 ease-out md:max-h-[550]"
                           />
                         </Lens>
                       ) : (
