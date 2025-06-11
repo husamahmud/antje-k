@@ -23,6 +23,23 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     setIsLoading(false)
   }, [])
 
+  const handleDownload = useCallback(async () => {
+    try {
+      const response = await fetch(image.src)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = image.alt || `image-${image.id}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Error downloading image:', error)
+    }
+  }, [image.src, image.alt, image.id])
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -63,6 +80,28 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
         >
+          {/* Download button */}
+          <button
+            onClick={handleDownload}
+            className="absolute top-0 left-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/70"
+            aria-label="Download image"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+          </button>
+
           {/* Close button */}
           <button
             onClick={onClose}
