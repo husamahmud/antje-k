@@ -88,8 +88,8 @@ export function Slider({ images }: SliderProps) {
                       filter: index !== activeIndex ? 'blur(4px) saturate(1.2)' : 'none',
                     }}
                   >
-                    <p className="text-3xl font-bold text-[#1F1E13] transition-all duration-300">{image.name}</p>
-                    <p className="text-3xl font-light text-[#1F1E13] transition-all duration-300">
+                    <p className="text-lg  md:text-3xl font-bold text-[#1F1E13] transition-all duration-300">{image.name}</p>
+                    <p className="text-lg md:text-3xl font-light text-[#1F1E13] transition-all duration-300">
                       {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]}{' '}
                       <span className="text-[#828282]">&quot;</span>
                     </p>
@@ -137,7 +137,7 @@ export function Slider({ images }: SliderProps) {
                   </div>
 
                   <div className="flex justify-end opacity-90 transition-opacity duration-300">
-                    <p className="text-3xl font-light text-[#828282] transition-all duration-300"
+                    <p className="text-lg  md:text-3xl font-light text-[#828282] transition-all duration-300"
                       style={{
                         filter: index !== activeIndex ? 'blur(4px) saturate(1.2)' : 'none',
                       }}
