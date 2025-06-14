@@ -132,7 +132,9 @@ const SlideContent = memo(({
               alt=""
               width={isMobile ? 800 : 1067}
               height={isMobile ? 400 : 540}
-              quality={10}
+              quality={highQuality}
+              priority={true}
+              unoptimized={false}
               className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all ease-out md:max-h-[550]"
               style={{
                 filter: isMobile ? 'blur(10px) saturate(1.3)' : 'blur(15px) saturate(1.6)',
