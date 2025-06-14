@@ -116,6 +116,7 @@ const LoadingSpinner = React.memo(() => (
 ))
 LoadingSpinner.displayName = 'LoadingSpinner'
 
+<<<<<<< HEAD
 // Memoized hold progress indicator
 const HoldProgressIndicator = React.memo(({ progress }: { progress: number }) => (
   <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm">
@@ -140,6 +141,25 @@ const HoldProgressIndicator = React.memo(({ progress }: { progress: number }) =>
   </div>
 ))
 HoldProgressIndicator.displayName = 'HoldProgressIndicator'
+=======
+// Add this helper function after CloseIcon component (around line 95)
+const downloadImage = async (src: string, alt: string, id: number) => {
+  try {
+    const response = await fetch(src)
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = alt || `image-${id}`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error('Error downloading image:', error)
+  }
+}
+>>>>>>> 56f8ff7 (dl in mobile)
 
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -151,20 +171,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
   }, [])
 
   const handleDownload = useCallback(async () => {
-    try {
-      const response = await fetch(image.src)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = image.alt || `image-${image.id}`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Error downloading image:', error)
-    }
+    await downloadImage(image.src, image.alt, image.id)
   }, [image.src, image.alt, image.id])
 
   const handleKeyDown = useCallback(
@@ -289,6 +296,7 @@ const ImageItem: React.FC<{
   onImageClick?: (image: GalleryImage) => void
   isMobile: boolean
 }> = React.memo(({ image, onImageClick, isMobile }) => {
+<<<<<<< HEAD
   const [hovering, setHovering] = useState(false)
   const [holdProgress, setHoldProgress] = useState(0)
 
@@ -331,6 +339,40 @@ const ImageItem: React.FC<{
       onImageClick(image)
     }
   }, [image, onImageClick])
+=======
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null)
+
+  const handleClick = useCallback(() => {
+    if (!isMobile) {
+      onImageClick?.(image)
+    }
+  }, [image, onImageClick, isMobile])
+
+  const handleTouchStart = useCallback(() => {
+    if (isMobile) {
+      const timer = setTimeout(async () => {
+        await downloadImage(image.src, image.alt, image.id)
+      }, 800) // 800ms long press
+      setLongPressTimer(timer)
+    }
+  }, [isMobile, image.src, image.alt, image.id])
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer)
+      setLongPressTimer(null)
+    }
+  }, [longPressTimer])
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer)
+      }
+    }
+  }, [longPressTimer])
+>>>>>>> 56f8ff7 (dl in mobile)
 
   const handleMouseDown = useCallback(() => {
     startHold()
@@ -369,17 +411,24 @@ const ImageItem: React.FC<{
 
   return (
     <motion.div
-      className="group relative my-auto w-full cursor-pointer transition-transform duration-100"
+      className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
       style={{ willChange: 'transform' }}
+<<<<<<< HEAD
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={endHold}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+=======
+      onClick={isMobile ? undefined : handleClick}
+      onTouchStart={isMobile ? handleTouchStart : undefined}
+      onTouchEnd={isMobile ? handleTouchEnd : undefined}
+      onTouchCancel={isMobile ? handleTouchEnd : undefined}
+>>>>>>> 56f8ff7 (dl in mobile)
       variants={itemVariants}
-      whileHover="hover"
-      whileTap="tap"
+      whileHover={!isMobile ? "hover" : undefined}
+      whileTap={!isMobile ? "tap" : undefined}
       transition={{ duration: 0.1, ease: 'easeOut' }}
     >
       <Lens
