@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useRef, useCallback, useMemo, memo } from 'react'
+import { useState, useRef, useCallback, useMemo, memo, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, EffectCoverflow } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
@@ -28,6 +28,27 @@ const X = memo(() => {
 })
 X.displayName = 'X'
 
+// Custom hook for responsive image quality
+const useResponsiveQuality = () => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  return {
+    highQuality: isMobile ? 50 : 100,
+    lowQuality: isMobile ? 30 : 50
+  }
+}
+
 // Memoized slide component
 const SlideContent = memo(({
   image,
@@ -35,6 +56,8 @@ const SlideContent = memo(({
   activeIndex,
   hovering,
   setHovering,
+  highQuality,
+  lowQuality,
 }: {
   image: ImageData
   index: number
@@ -42,6 +65,8 @@ const SlideContent = memo(({
   hovering: boolean
   setHovering: (hovering: boolean) => void
   onSlideClick: (index: number) => void
+  highQuality: number
+  lowQuality: number
 }) => {
   const isActive = index === activeIndex
   const shouldPreload = Math.abs(index - activeIndex) <= 2 // Preload current and adjacent images
@@ -69,7 +94,7 @@ const SlideContent = memo(({
               alt=""
               width={1067}
               height={540}
-              quality={100}
+              quality={highQuality}
               priority={index <= 2}
               unoptimized={true}
               className="absolute opacity-0 pointer-events-none"
@@ -83,7 +108,7 @@ const SlideContent = memo(({
               alt=""
               width={1067}
               height={540}
-              quality={50}
+              quality={lowQuality}
               className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all duration-300 ease-out md:max-h-[550]"
               style={{ filter: 'blur(15px) saturate(1.6)', zIndex: 0 }}
             />
@@ -98,7 +123,7 @@ const SlideContent = memo(({
                 src={image.src || '/placeholder.svg'}
                 alt={image.name}
                 width={1067}
-                quality={100}
+                quality={highQuality}
                 height={540}
                 priority={true}
                 unoptimized={true}
@@ -110,7 +135,7 @@ const SlideContent = memo(({
               src={image.src || '/placeholder.svg'}
               alt={image.name}
               width={1067}
-              quality={50}
+              quality={lowQuality}
               height={540}
               priority={index <= 2}
               className="aspect-square max-h-[350px] opacity-70 w-fit max-w-full object-contain transition-all duration-300 ease-out md:max-h-[550]"
@@ -136,6 +161,7 @@ export const Slider = memo(({ images }: SliderProps) => {
   const [hovering, setHovering] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const swiperRef = useRef<SwiperType | null>(null)
+  const { highQuality, lowQuality } = useResponsiveQuality()
 
   const handleSlideClick = useCallback((index: number) => {
     if (index !== activeIndex && swiperRef.current) {
@@ -199,9 +225,11 @@ export const Slider = memo(({ images }: SliderProps) => {
           hovering={hovering}
           setHovering={setHovering}
           onSlideClick={handleSlideClick}
+          highQuality={highQuality}
+          lowQuality={lowQuality}
         />
       </SwiperSlide>
-    )), [images, activeIndex, hovering, setHovering, handleSlideClick]
+    )), [images, activeIndex, hovering, setHovering, handleSlideClick, highQuality, lowQuality]
   )
 
   return (
