@@ -65,25 +65,28 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
   }
 
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
         className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-[#0000009e] backdrop-blur-md"
+        style={{ willChange: 'opacity' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.15 }}
+        transition={{ duration: 0.08, ease: 'easeOut' }}
       >
         <motion.div
           className="relative h-full max-h-[90%] w-full max-w-4xl p-4"
-          initial={{ scale: 0.95, opacity: 0 }}
+          style={{ willChange: 'transform, opacity' }}
+          initial={{ scale: 0.98, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          exit={{ scale: 0.98, opacity: 0 }}
+          transition={{ duration: 0.1, ease: 'easeOut' }}
         >
           {/* Download button */}
           <button
             onClick={handleDownload}
-            className="absolute top-0 left-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/70"
+            className="absolute top-0 left-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-transform duration-100 hover:scale-110 hover:bg-black/70"
+            style={{ willChange: 'transform' }}
             aria-label="Download image"
           >
             <svg
@@ -105,7 +108,8 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-0 right-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-black/70"
+            className="absolute top-0 right-0 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-transform duration-100 hover:scale-110 hover:bg-black/70"
+            style={{ willChange: 'transform' }}
             aria-label="Close modal"
           >
             <svg
@@ -125,9 +129,9 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
           </button>
           <motion.div
             className="relative flex h-full w-full items-center justify-center p-10"
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.25, delay: 0.05 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.1 }}
           >
             {isLoading && (
               <div className="absolute inset-0 z-20 flex items-center justify-center">
@@ -148,7 +152,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 height={800}
                 className="max-h-[90vh] max-w-full object-contain"
                 priority
-                quality={50}
+                quality={70}
                 onLoad={handleLoad}
               />
             </Lens>
@@ -172,23 +176,27 @@ const ImageItem: React.FC<{
 
   return (
     <motion.div
-      className="group relative my-auto w-full cursor-pointer transition-opacity duration-200"
+      className="group relative my-auto w-full cursor-pointer transition-transform duration-100"
+      style={{ willChange: 'transform' }}
       onClick={handleClick}
       whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.1, ease: 'easeOut' }}
     >
       <NextImage
         src={image.src}
         alt={image.alt}
-        className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-200"
+        className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-100"
         width={500}
         height={300}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
-        quality={50}
+        quality={25}
+        placeholder="blur"
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-70" />
-      <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-100 group-hover:opacity-70" />
+      <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-100 group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
         <p className="font-semibold">{image.size[0]}x{image.size[1]}x{image.size[2]}mm</p>
       </div>
@@ -222,7 +230,7 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
 
   return (
     <Transition className="flex w-full flex-col items-center overflow-x-hidden p-10 md:p-14">
-      <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style={{ willChange: 'contents' }}>
         {images.map((image) => (
           <ImageItem
             key={image.id}

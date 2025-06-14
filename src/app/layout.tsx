@@ -42,7 +42,13 @@ function RootLayout({
           dmSans.style,
           sourceSerif4.style
         )}
-        style={{ backgroundImage: `url('/bg.jpg')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}
+        style={{ 
+          backgroundImage: `url('/bg.jpg')`, 
+          backgroundRepeat: 'no-repeat', 
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
       >
         <TransitionProvider>
           <Header />

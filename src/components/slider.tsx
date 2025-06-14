@@ -35,7 +35,6 @@ const SlideContent = memo(({
   activeIndex,
   hovering,
   setHovering,
-  onSlideClick
 }: {
   image: ImageData
   index: number
@@ -154,12 +153,6 @@ export const Slider = memo(({ images }: SliderProps) => {
 
   // Memoize swiper configuration
   const swiperConfig = useMemo(() => ({
-    pagination: {
-      clickable: true,
-      bulletClass: 'swiper-pagination-bullet-custom',
-      bulletActiveClass: 'swiper-pagination-bullet-active-custom',
-      renderBullet: (index: number, className: string) => `<span class="${className}"></span>`,
-    },
     modules: [Pagination, EffectCoverflow],
     spaceBetween: 10,
     className: "w-svw pb-16 overflow-visible",
