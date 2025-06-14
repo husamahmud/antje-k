@@ -44,8 +44,9 @@ const useResponsiveQuality = () => {
   }, [])
 
   return {
-    highQuality: isMobile ? 50 : 100,
-    lowQuality: isMobile ? 30 : 50
+    highQuality: isMobile ? 25 : 100,
+    lowQuality: isMobile ? 15 : 50,
+    isMobile
   }
 }
 
@@ -58,6 +59,7 @@ const SlideContent = memo(({
   setHovering,
   highQuality,
   lowQuality,
+  isMobile,
 }: {
   image: ImageData
   index: number
@@ -67,36 +69,58 @@ const SlideContent = memo(({
   onSlideClick: (index: number) => void
   highQuality: number
   lowQuality: number
+  isMobile: boolean
 }) => {
   const isActive = index === activeIndex
-  const shouldPreload = Math.abs(index - activeIndex) <= 2 // Preload current and adjacent images
+  const shouldPreload = isMobile
+    ? Math.abs(index - activeIndex) <= 1
+    : Math.abs(index - activeIndex) <= 2
 
   return (
-    <div className="mx-auto flex h-full w-fit transform flex-col gap-8 overflow-visible transition-all duration-300 ease-out">
-      <div className="flex items-center justify-between opacity-90 transition-opacity duration-200"
+    <div
+      className="mx-auto flex h-full w-fit transform flex-col gap-8 overflow-visible transition-all ease-out"
+      style={{
+        transitionDuration: isMobile ? '200ms' : '300ms',
+        willChange: isActive ? 'transform' : 'auto'
+      }}
+    >
+      <div
+        className="flex items-center justify-between opacity-90 transition-opacity"
         style={{
-          filter: !isActive ? 'blur(4px) saturate(1.2)' : 'none',
+          filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+          transitionDuration: isMobile ? '150ms' : '200ms'
         }}
       >
-        <p className="text-lg  md:text-3xl font-bold text-[#1F1E13] transition-all duration-200">{image.name}</p>
-        <p className="text-lg md:text-3xl font-light text-[#1F1E13] transition-all duration-200">
+        <p className="text-lg md:text-3xl font-bold text-[#1F1E13] transition-all"
+          style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
+        >
+          {image.name}
+        </p>
+        <p className="text-lg md:text-3xl font-light text-[#1F1E13] transition-all"
+          style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
+        >
           {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]}{' '}
           <span className="text-[#828282]">&quot;</span>
         </p>
       </div>
 
-      <div className="transform overflow-visible transition-all duration-300 ease-out hover:scale-[1.02]">
+      <div
+        className={`transform overflow-visible transition-all ease-out ${!isMobile ? 'hover:scale-[1.02]' : ''}`}
+        style={{
+          transitionDuration: isMobile ? '200ms' : '300ms',
+          willChange: 'transform'
+        }}
+      >
         <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible p-4 md:h-[550px] md:p-6">
-          {/* Preload hidden images for faster navigation */}
           {shouldPreload && !isActive && (
             <Image
               src={image.src || '/placeholder.svg'}
               alt=""
-              width={1067}
-              height={540}
-              quality={highQuality}
-              priority={index <= 2}
-              unoptimized={true}
+              width={isMobile ? 800 : 1067}
+              height={isMobile ? 400 : 540}
+              quality={isMobile ? 20 : highQuality}
+              priority={index <= 1}
+              unoptimized={false}
               className="absolute opacity-0 pointer-events-none"
               style={{ zIndex: -1 }}
             />
@@ -106,11 +130,16 @@ const SlideContent = memo(({
             <Image
               src={image.src || '/placeholder.svg'}
               alt=""
-              width={1067}
-              height={540}
+              width={isMobile ? 800 : 1067}
+              height={isMobile ? 400 : 540}
               quality={lowQuality}
-              className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all duration-300 ease-out md:max-h-[550]"
-              style={{ filter: 'blur(15px) saturate(1.6)', zIndex: 0 }}
+              className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all ease-out md:max-h-[550]"
+              style={{
+                filter: isMobile ? 'blur(10px) saturate(1.3)' : 'blur(15px) saturate(1.6)',
+                zIndex: 0,
+                transitionDuration: isMobile ? '200ms' : '300ms',
+                willChange: 'filter'
+              }}
             />
           )}
 
@@ -122,35 +151,47 @@ const SlideContent = memo(({
               <Image
                 src={image.src || '/placeholder.svg'}
                 alt={image.name}
-                width={1067}
+                width={isMobile ? 800 : 1067}
+                height={isMobile ? 400 : 540}
                 quality={highQuality}
-                height={540}
                 priority={true}
-                unoptimized={true}
-                className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all duration-300 ease-out md:max-h-[550]"
+                unoptimized={false}
+                className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
+                style={{
+                  transitionDuration: isMobile ? '200ms' : '300ms'
+                }}
               />
             </Lens>
           ) : (
             <Image
               src={image.src || '/placeholder.svg'}
               alt={image.name}
-              width={1067}
+              width={isMobile ? 800 : 1067}
+              height={isMobile ? 400 : 540}
               quality={lowQuality}
-              height={540}
-              priority={index <= 2}
-              className="aspect-square max-h-[350px] opacity-70 w-fit max-w-full object-contain transition-all duration-300 ease-out md:max-h-[550]"
-              style={{ filter: 'blur(4px) saturate(1.2)' }}
+              priority={index <= 1}
+              className="aspect-square max-h-[350px] opacity-70 w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
+              style={{
+                filter: isMobile ? 'blur(2px) saturate(1.1)' : 'blur(4px) saturate(1.2)',
+                transitionDuration: isMobile ? '200ms' : '300ms'
+              }}
             />
           )}
         </div>
       </div>
 
-      <div className="flex justify-end opacity-90 transition-opacity duration-200">
-        <p className="text-lg  md:text-3xl font-light text-[#828282] transition-all duration-200"
+      <div
+        className="flex justify-end opacity-90 transition-opacity"
+        style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
+      >
+        <p className="text-lg md:text-3xl font-light text-[#828282] transition-all"
           style={{
-            filter: !isActive ? 'blur(4px) saturate(1.2)' : 'none',
+            filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+            transitionDuration: isMobile ? '150ms' : '200ms'
           }}
-        >{image.type}</p>
+        >
+          {image.type}
+        </p>
       </div>
     </div>
   )
@@ -161,7 +202,7 @@ export const Slider = memo(({ images }: SliderProps) => {
   const [hovering, setHovering] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const swiperRef = useRef<SwiperType | null>(null)
-  const { highQuality, lowQuality } = useResponsiveQuality()
+  const { highQuality, lowQuality, isMobile } = useResponsiveQuality()
 
   const handleSlideClick = useCallback((index: number) => {
     if (index !== activeIndex && swiperRef.current) {
@@ -177,20 +218,20 @@ export const Slider = memo(({ images }: SliderProps) => {
     swiperRef.current = swiper
   }, [])
 
-  // Memoize swiper configuration
+  // Memoize swiper configuration with mobile optimizations
   const swiperConfig = useMemo(() => ({
     modules: [Pagination, EffectCoverflow],
-    spaceBetween: 10,
+    spaceBetween: isMobile ? 5 : 10,
     className: "w-svw pb-16 overflow-visible",
     slidesPerView: 1.3 as const,
     centeredSlides: true,
-    speed: 500, // Faster navigation
+    speed: isMobile ? 300 : 500,
     effect: "coverflow" as const,
     coverflowEffect: {
       rotate: 0,
       stretch: 0,
-      depth: 100,
-      modifier: 2,
+      depth: isMobile ? 50 : 100,
+      modifier: isMobile ? 1 : 2,
       slideShadows: false,
     },
     breakpoints: {
@@ -207,16 +248,19 @@ export const Slider = memo(({ images }: SliderProps) => {
         spaceBetween: 40,
       },
     }
-  }), [])
+  }), [isMobile])
 
   // Memoize slides
   const slides = useMemo(() =>
     images.map((image, index) => (
       <SwiperSlide
         key={image.src}
-        className="mr-0 overflow-visible transition-all duration-300 ease-out"
+        className="mr-0 overflow-visible transition-all ease-out"
         onClick={() => handleSlideClick(index)}
-        style={{ cursor: index !== activeIndex ? 'pointer' : 'default' }}
+        style={{
+          cursor: index !== activeIndex ? 'pointer' : 'default',
+          transitionDuration: isMobile ? '200ms' : '300ms'
+        }}
       >
         <SlideContent
           image={image}
@@ -227,9 +271,10 @@ export const Slider = memo(({ images }: SliderProps) => {
           onSlideClick={handleSlideClick}
           highQuality={highQuality}
           lowQuality={lowQuality}
+          isMobile={isMobile}
         />
       </SwiperSlide>
-    )), [images, activeIndex, hovering, setHovering, handleSlideClick, highQuality, lowQuality]
+    )), [images, activeIndex, hovering, setHovering, handleSlideClick, highQuality, lowQuality, isMobile]
   )
 
   return (
