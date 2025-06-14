@@ -270,6 +270,7 @@ const ImageItem: React.FC<{
   isMobile: boolean
 }> = React.memo(({ image, onImageClick, isMobile }) => {
   const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null)
+  const [hovering, setHovering] = useState(false)
 
   const handleClick = useCallback(() => {
     if (!isMobile) {
