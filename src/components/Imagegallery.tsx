@@ -34,6 +34,39 @@ const useIsMobile = () => {
   return isMobile
 }
 
+// Custom hook for hold-to-download functionality
+const useHoldToDownload = (onDownload: () => void, delay: number = 800) => {
+  const [isHolding, setIsHolding] = useState(false)
+  const [holdTimer, setHoldTimer] = useState<NodeJS.Timeout | null>(null)
+
+  const startHold = useCallback(() => {
+    setIsHolding(true)
+    const timer = setTimeout(() => {
+      onDownload()
+      setIsHolding(false)
+    }, delay)
+    setHoldTimer(timer)
+  }, [onDownload, delay])
+
+  const endHold = useCallback(() => {
+    setIsHolding(false)
+    if (holdTimer) {
+      clearTimeout(holdTimer)
+      setHoldTimer(null)
+    }
+  }, [holdTimer])
+
+  useEffect(() => {
+    return () => {
+      if (holdTimer) {
+        clearTimeout(holdTimer)
+      }
+    }
+  }, [holdTimer])
+
+  return { isHolding, startHold, endHold }
+}
+
 // Memoized download SVG icon
 const DownloadIcon = React.memo(() => (
   <svg
@@ -82,6 +115,31 @@ const LoadingSpinner = React.memo(() => (
   </div>
 ))
 LoadingSpinner.displayName = 'LoadingSpinner'
+
+// Memoized hold progress indicator
+const HoldProgressIndicator = React.memo(({ progress }: { progress: number }) => (
+  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+    <div className="relative flex items-center justify-center">
+      <div className="h-16 w-16 rounded-full border-4 border-white/30">
+        <svg className="h-full w-full -rotate-90 transform" viewBox="0 0 100 100">
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="white"
+            strokeWidth="8"
+            fill="none"
+            strokeDasharray={`${progress * 2.827} 282.7`}
+            strokeLinecap="round"
+            className="transition-all duration-100"
+          />
+        </svg>
+      </div>
+      <DownloadIcon />
+    </div>
+  </div>
+))
+HoldProgressIndicator.displayName = 'HoldProgressIndicator'
 
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -231,9 +289,64 @@ const ImageItem: React.FC<{
   onImageClick?: (image: GalleryImage) => void
   isMobile: boolean
 }> = React.memo(({ image, onImageClick, isMobile }) => {
+  const [hovering, setHovering] = useState(false)
+  const [holdProgress, setHoldProgress] = useState(0)
+
+  const handleDownload = useCallback(async () => {
+    try {
+      const response = await fetch(image.src)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = image.alt || `image-${image.id}`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Error downloading image:', error)
+    }
+  }, [image.src, image.alt, image.id])
+
+  const { isHolding, startHold, endHold } = useHoldToDownload(handleDownload, 800)
+
+  // Update progress during hold
+  useEffect(() => {
+    if (isHolding) {
+      const interval = setInterval(() => {
+        setHoldProgress(prev => {
+          const newProgress = prev + (100 / 80) // 800ms total, update every 10ms
+          return newProgress >= 100 ? 100 : newProgress
+        })
+      }, 10)
+      return () => clearInterval(interval)
+    } else {
+      setHoldProgress(0)
+    }
+  }, [isHolding])
+
   const handleClick = useCallback(() => {
-    onImageClick?.(image)
+    if (onImageClick) {
+      onImageClick(image)
+    }
   }, [image, onImageClick])
+
+  const handleMouseDown = useCallback(() => {
+    startHold()
+  }, [startHold])
+
+  const handleMouseUp = useCallback(() => {
+    endHold()
+  }, [endHold])
+
+  const handleTouchStart = useCallback(() => {
+    startHold()
+  }, [startHold])
+
+  const handleTouchEnd = useCallback(() => {
+    endHold()
+  }, [endHold])
 
   // Memoized motion variants
   const itemVariants = useMemo(() => ({
@@ -259,24 +372,38 @@ const ImageItem: React.FC<{
       className="group relative my-auto w-full cursor-pointer transition-transform duration-100"
       style={{ willChange: 'transform' }}
       onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={endHold}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       variants={itemVariants}
       whileHover="hover"
       whileTap="tap"
       transition={{ duration: 0.1, ease: 'easeOut' }}
     >
-      <NextImage
-        src={image.src}
-        alt={image.alt}
-        className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-100"
-        width={imageConfig.width}
-        height={imageConfig.height}
-        style={{ width: '100%', height: 'auto' }}
-        loading="lazy"
-        quality={imageConfig.quality}
-        placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-        sizes={isMobile ? "(max-width: 640px) 100vw" : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"}
-      />
+      <Lens
+        hovering={hovering}
+        setHovering={setHovering}
+      >
+        <NextImage
+          src={image.src}
+          alt={image.alt}
+          className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-100"
+          width={imageConfig.width}
+          height={imageConfig.height}
+          style={{ width: '100%', height: 'auto' }}
+          loading="lazy"
+          quality={imageConfig.quality}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          sizes={isMobile ? "(max-width: 640px) 100vw" : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"}
+        />
+      </Lens>
+
+      {/* Hold progress indicator */}
+      {isHolding && <HoldProgressIndicator progress={holdProgress} />}
+
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-100 group-hover:opacity-70" />
       <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-100 group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
