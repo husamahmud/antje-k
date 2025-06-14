@@ -44,7 +44,7 @@ const useResponsiveQuality = () => {
   }, [])
 
   return {
-    highQuality: isMobile ? 25 : 100,
+    highQuality: isMobile ? 25 : 70,
     lowQuality: isMobile ? 15 : 50,
     isMobile
   }
