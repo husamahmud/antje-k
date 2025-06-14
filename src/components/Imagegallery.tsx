@@ -34,39 +34,6 @@ const useIsMobile = () => {
   return isMobile
 }
 
-// Custom hook for hold-to-download functionality
-const useHoldToDownload = (onDownload: () => void, delay: number = 800) => {
-  const [isHolding, setIsHolding] = useState(false)
-  const [holdTimer, setHoldTimer] = useState<NodeJS.Timeout | null>(null)
-
-  const startHold = useCallback(() => {
-    setIsHolding(true)
-    const timer = setTimeout(() => {
-      onDownload()
-      setIsHolding(false)
-    }, delay)
-    setHoldTimer(timer)
-  }, [onDownload, delay])
-
-  const endHold = useCallback(() => {
-    setIsHolding(false)
-    if (holdTimer) {
-      clearTimeout(holdTimer)
-      setHoldTimer(null)
-    }
-  }, [holdTimer])
-
-  useEffect(() => {
-    return () => {
-      if (holdTimer) {
-        clearTimeout(holdTimer)
-      }
-    }
-  }, [holdTimer])
-
-  return { isHolding, startHold, endHold }
-}
-
 // Memoized download SVG icon
 const DownloadIcon = React.memo(() => (
   <svg
