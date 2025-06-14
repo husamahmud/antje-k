@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import NextImage from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
@@ -15,9 +15,78 @@ export interface GalleryImage {
   size: [number, number, number]
 }
 
+// Memoized hook for mobile detection with resize handling
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < 640
+  })
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return isMobile
+}
+
+// Memoized download SVG icon
+const DownloadIcon = React.memo(() => (
+  <svg
+    className="h-5 w-5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+    />
+  </svg>
+))
+DownloadIcon.displayName = 'DownloadIcon'
+
+// Memoized close SVG icon
+const CloseIcon = React.memo(() => (
+  <svg
+    className="h-5 w-5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+))
+CloseIcon.displayName = 'CloseIcon'
+
+// Memoized loading component
+const LoadingSpinner = React.memo(() => (
+  <div className="absolute inset-0 z-20 flex items-center justify-center">
+    <div className="flex items-center space-x-3 text-zinc-100">
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300" />
+      <span className="text-lg font-medium">Loading...</span>
+    </div>
+  </div>
+))
+LoadingSpinner.displayName = 'LoadingSpinner'
+
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [hovering, setHovering] = useState(false)
+  const isMobile = useIsMobile()
 
   const handleLoad = useCallback(() => {
     setIsLoading(false)
@@ -49,7 +118,28 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     [onClose]
   )
 
-  React.useEffect(() => {
+  // Memoized motion variants for better performance
+  const backdropVariants = useMemo(() => ({
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 }
+  }), [])
+
+  const modalVariants = useMemo(() => ({
+    initial: { scale: 0.98, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    exit: { scale: 0.98, opacity: 0 }
+  }), [])
+
+  const contentVariants = useMemo(() => ({
+    initial: { opacity: 0 },
+    animate: { opacity: 1 }
+  }), [])
+
+  // Memoized image quality based on device
+  const imageQuality = useMemo(() => isMobile ? 40 : 70, [isMobile])
+
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
 
@@ -69,17 +159,19 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
       <motion.div
         className="bg-opacity-30 fixed inset-0 z-50 flex items-center justify-center bg-[#0000009e] backdrop-blur-md"
         style={{ willChange: 'opacity' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        variants={backdropVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         transition={{ duration: 0.08, ease: 'easeOut' }}
       >
         <motion.div
           className="relative h-full max-h-[90%] w-full max-w-4xl p-4"
           style={{ willChange: 'transform, opacity' }}
-          initial={{ scale: 0.98, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.98, opacity: 0 }}
+          variants={modalVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
           transition={{ duration: 0.1, ease: 'easeOut' }}
         >
           {/* Download button */}
@@ -89,20 +181,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
             style={{ willChange: 'transform' }}
             aria-label="Download image"
           >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
+            <DownloadIcon />
           </button>
 
           {/* Close button */}
@@ -112,35 +191,16 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
             style={{ willChange: 'transform' }}
             aria-label="Close modal"
           >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <CloseIcon />
           </button>
           <motion.div
             className="relative flex h-full w-full items-center justify-center p-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            variants={contentVariants}
+            initial="initial"
+            animate="animate"
             transition={{ duration: 0.1 }}
           >
-            {isLoading && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center">
-                <div className="flex items-center space-x-3 text-zinc-100">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300" />
-                  <span className="text-lg font-medium">Loading...</span>
-                </div>
-              </div>
-            )}
+            {isLoading && <LoadingSpinner />}
             <Lens
               hovering={hovering}
               setHovering={setHovering}
@@ -152,7 +212,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 height={800}
                 className="max-h-[90vh] max-w-full object-contain"
                 priority
-                quality={70}
+                quality={imageQuality}
                 onLoad={handleLoad}
               />
             </Lens>
@@ -168,37 +228,59 @@ Modal.displayName = 'Modal'
 
 const ImageItem: React.FC<{
   image: GalleryImage
-  onImageClick: (image: GalleryImage) => void
-}> = React.memo(({ image, onImageClick }) => {
+  onImageClick?: (image: GalleryImage) => void
+  isMobile: boolean
+}> = React.memo(({ image, onImageClick, isMobile }) => {
   const handleClick = useCallback(() => {
-    onImageClick(image)
+    onImageClick?.(image)
   }, [image, onImageClick])
+
+  // Memoized motion variants
+  const itemVariants = useMemo(() => ({
+    hover: { scale: 1.02 },
+    tap: { scale: 0.98 }
+  }), [])
+
+  // Memoized image dimensions and quality based on device
+  const imageConfig = useMemo(() => ({
+    width: isMobile ? 300 : 500,
+    height: isMobile ? 200 : 300,
+    quality: isMobile ? 15 : 25
+  }), [isMobile])
+
+  // Memoized size string
+  const sizeString = useMemo(() =>
+    `${image.size[0]}x${image.size[1]}x${image.size[2]}mm`,
+    [image.size]
+  )
 
   return (
     <motion.div
       className="group relative my-auto w-full cursor-pointer transition-transform duration-100"
       style={{ willChange: 'transform' }}
       onClick={handleClick}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      variants={itemVariants}
+      whileHover="hover"
+      whileTap="tap"
       transition={{ duration: 0.1, ease: 'easeOut' }}
     >
       <NextImage
         src={image.src}
         alt={image.alt}
         className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-100"
-        width={500}
-        height={300}
+        width={imageConfig.width}
+        height={imageConfig.height}
         style={{ width: '100%', height: 'auto' }}
         loading="lazy"
-        quality={25}
+        quality={imageConfig.quality}
         placeholder="blur"
         blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+        sizes={isMobile ? "(max-width: 640px) 100vw" : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-100 group-hover:opacity-70" />
       <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-100 group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
-        <p className="font-semibold">{image.size[0]}x{image.size[1]}x{image.size[2]}mm</p>
+        <p className="font-semibold">{sizeString}</p>
       </div>
     </motion.div>
   )
@@ -206,13 +288,9 @@ const ImageItem: React.FC<{
 
 ImageItem.displayName = 'ImageItem'
 
-const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
+const ImageGallery: React.FC<{ images: GalleryImage[] }> = React.memo(({ images }) => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
-
-  // Memoize mobile detection
-  const isMobile = useMemo(() => {
-    return typeof window !== 'undefined' && window.innerWidth < 640
-  }, [])
+  const isMobile = useIsMobile()
 
   const handleImageClick = useCallback(
     (image: GalleryImage) => {
@@ -228,16 +306,29 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
     setSelectedImage(null)
   }, [])
 
+  // Memoized grid class names for better performance
+  const gridClassName = useMemo(() =>
+    "grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+    []
+  )
+
+  // Memoized image items to prevent unnecessary re-renders
+  const imageItems = useMemo(() =>
+    images.map((image) => (
+      <ImageItem
+        key={image.id}
+        image={image}
+        onImageClick={isMobile ? undefined : handleImageClick}
+        isMobile={isMobile}
+      />
+    )),
+    [images, handleImageClick, isMobile]
+  )
+
   return (
     <Transition className="flex w-full flex-col items-center overflow-x-hidden p-10 md:p-14">
-      <div className="grid h-full w-full grid-cols-1 gap-20 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style={{ willChange: 'contents' }}>
-        {images.map((image) => (
-          <ImageItem
-            key={image.id}
-            image={image}
-            onImageClick={handleImageClick}
-          />
-        ))}
+      <div className={gridClassName} style={{ willChange: 'contents' }}>
+        {imageItems}
       </div>
       {selectedImage && !isMobile && (
         <Modal
@@ -247,6 +338,8 @@ const ImageGallery: React.FC<{ images: GalleryImage[] }> = ({ images }) => {
       )}
     </Transition>
   )
-}
+})
+
+ImageGallery.displayName = 'ImageGallery'
 
 export default ImageGallery

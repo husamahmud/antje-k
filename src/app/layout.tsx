@@ -37,19 +37,21 @@ function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          'font-caveat flex min-h-svh flex-col bg-fixed antialiased',
+          'font-caveat flex min-h-svh flex-col antialiased relative',
           caveat.style,
           dmSans.style,
           sourceSerif4.style
         )}
-        style={{ 
-          backgroundImage: `url('/bg.jpg')`, 
-          backgroundRepeat: 'no-repeat', 
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
       >
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            backgroundImage: `url('/bg.jpg')`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
         <TransitionProvider>
           <Header />
           {children}
