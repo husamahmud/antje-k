@@ -50,6 +50,8 @@ function RootLayout({
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundBlendMode: 'multiply',
+            opacity: 0.8
           }}
         />
         <TransitionProvider>
