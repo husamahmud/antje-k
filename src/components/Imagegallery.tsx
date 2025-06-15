@@ -236,7 +236,6 @@ const ImageItem: React.FC<{
   onImageClick?: (image: GalleryImage) => void
   isMobile: boolean
 }> = React.memo(({ image, onImageClick, isMobile }) => {
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null)
   const [hovering, setHovering] = useState(false)
 
   const handleClick = useCallback(() => {
@@ -244,31 +243,6 @@ const ImageItem: React.FC<{
       onImageClick?.(image)
     }
   }, [image, onImageClick, isMobile])
-
-  const handleTouchStart = useCallback(() => {
-    if (isMobile) {
-      const timer = setTimeout(async () => {
-        await downloadImage(image.src, image.alt, image.id)
-      }, 800) // 800ms long press
-      setLongPressTimer(timer)
-    }
-  }, [isMobile, image.src, image.alt, image.id])
-
-  const handleTouchEnd = useCallback(() => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer)
-      setLongPressTimer(null)
-    }
-  }, [longPressTimer])
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (longPressTimer) {
-        clearTimeout(longPressTimer)
-      }
-    }
-  }, [longPressTimer])
 
   // Memoized motion variants
   const itemVariants = useMemo(() => ({
@@ -280,7 +254,7 @@ const ImageItem: React.FC<{
   const imageConfig = useMemo(() => ({
     width: isMobile ? 300 : 500,
     height: isMobile ? 200 : 300,
-    quality: isMobile ? 15 : 25
+    quality: isMobile ? 15 : 30
   }), [isMobile])
 
   // Memoized size string
@@ -290,18 +264,15 @@ const ImageItem: React.FC<{
   )
 
   return (
-    <motion.div
-      className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
-      style={{ willChange: 'transform' }}
-      onClick={isMobile ? undefined : handleClick}
-      onTouchStart={isMobile ? handleTouchStart : undefined}
-      onTouchEnd={isMobile ? handleTouchEnd : undefined}
-      onTouchCancel={isMobile ? handleTouchEnd : undefined}
-      variants={itemVariants}
-      whileHover={!isMobile ? "hover" : undefined}
-      whileTap={!isMobile ? "tap" : undefined}
-      transition={{ duration: 0.1, ease: 'easeOut' }}
-    >
+          <motion.div
+        className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
+        style={{ willChange: 'transform' }}
+        onClick={isMobile ? undefined : handleClick}
+        variants={itemVariants}
+        whileHover={!isMobile ? "hover" : undefined}
+        whileTap={!isMobile ? "tap" : undefined}
+        transition={{ duration: 0.1, ease: 'easeOut' }}
+      >
       <Lens
         hovering={hovering}
         setHovering={setHovering}
