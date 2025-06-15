@@ -236,7 +236,7 @@ const ImageItem: React.FC<{
   onImageClick?: (image: GalleryImage) => void
   isMobile: boolean
 }> = React.memo(({ image, onImageClick, isMobile }) => {
-  const [hovering, setHovering] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const handleClick = useCallback(() => {
     if (!isMobile) {
@@ -244,17 +244,21 @@ const ImageItem: React.FC<{
     }
   }, [image, onImageClick, isMobile])
 
+  const handleLoad = useCallback(() => {
+    setIsLoading(false)
+  }, [])
+
   // Memoized motion variants
   const itemVariants = useMemo(() => ({
     hover: { scale: 1.02 },
     tap: { scale: 0.98 }
   }), [])
 
-  // Memoized image dimensions and quality based on device
+  // Lower quality for faster loading
   const imageConfig = useMemo(() => ({
     width: isMobile ? 300 : 500,
     height: isMobile ? 200 : 300,
-    quality: isMobile ? 15 : 30
+    quality: isMobile ? 10 : 15  // Much lower quality for faster loading
   }), [isMobile])
 
   // Memoized size string
@@ -264,33 +268,41 @@ const ImageItem: React.FC<{
   )
 
   return (
-          <motion.div
-        className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
-        style={{ willChange: 'transform' }}
-        onClick={isMobile ? undefined : handleClick}
-        variants={itemVariants}
-        whileHover={!isMobile ? "hover" : undefined}
-        whileTap={!isMobile ? "tap" : undefined}
-        transition={{ duration: 0.1, ease: 'easeOut' }}
-      >
-      <Lens
-        hovering={hovering}
-        setHovering={setHovering}
-      >
+    <motion.div
+      className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
+      style={{ willChange: 'transform' }}
+      onClick={isMobile ? undefined : handleClick}
+      variants={itemVariants}
+      whileHover={!isMobile ? "hover" : undefined}
+      whileTap={!isMobile ? "tap" : undefined}
+      transition={{ duration: 0.1, ease: 'easeOut' }}
+    >
+      {/* Aspect ratio container to prevent layout shift */}
+      <div className="relative w-full" style={{ aspectRatio: '5/3' }}>
+        {/* Loading placeholder */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+        
         <NextImage
           src={image.src}
           alt={image.alt}
-          className="object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-100"
+          className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-300 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
           width={imageConfig.width}
           height={imageConfig.height}
           style={{ width: '100%', height: 'auto' }}
           loading="lazy"
           quality={imageConfig.quality}
           placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           sizes={isMobile ? "(max-width: 640px) 100vw" : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"}
+          onLoad={handleLoad}
         />
-      </Lens>
+      </div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-100 group-hover:opacity-70" />
       <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-100 group-hover:opacity-100">
