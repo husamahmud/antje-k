@@ -267,14 +267,64 @@ const ImageItem: React.FC<{
     [image.size]
   )
 
+  // On mobile, render a simple div without motion or events
+  if (isMobile) {
+    return (
+      <div className="group relative my-auto w-full">
+        {/* Aspect ratio container to prevent layout shift */}
+        <div className="relative w-full" style={{ aspectRatio: '5/3' }}>
+          {/* Loading placeholder */}
+          {isLoading && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          
+          <NextImage
+            src={image.src}
+            alt={image.alt}
+            className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-300 ${
+              isLoading ? 'opacity-0' : 'opacity-100'
+            }`}
+            width={imageConfig.width}
+            height={imageConfig.height}
+            style={{ 
+              width: '100%', 
+              height: 'auto',
+              // Ensure context menu is not disabled
+              userSelect: 'auto',
+              WebkitUserSelect: 'auto',
+              WebkitTouchCallout: 'default'
+            }}
+            loading="lazy"
+            quality={imageConfig.quality}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+            sizes="(max-width: 640px) 100vw"
+            onLoad={handleLoad}
+            // Remove any drag prevention to allow native context menu
+            draggable={true}
+          />
+        </div>
+
+        {/* Show description on mobile without hover effects */}
+        <div className="mt-2 flex justify-between text-sm text-gray-700">
+          <p className="font-semibold">{image.description}</p>
+          <p className="font-semibold">{sizeString}</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Desktop version with motion and events
   return (
     <motion.div
-      className={`group relative my-auto w-full transition-transform duration-100 ${!isMobile ? 'cursor-pointer' : ''}`}
+      className="group relative my-auto w-full cursor-pointer transition-transform duration-100"
       style={{ willChange: 'transform' }}
-      onClick={isMobile ? undefined : handleClick}
+      onClick={handleClick}
       variants={itemVariants}
-      whileHover={!isMobile ? "hover" : undefined}
-      whileTap={!isMobile ? "tap" : undefined}
+      whileHover="hover"
+      whileTap="tap"
       transition={{ duration: 0.1, ease: 'easeOut' }}
     >
       {/* Aspect ratio container to prevent layout shift */}
@@ -299,7 +349,7 @@ const ImageItem: React.FC<{
           quality={imageConfig.quality}
           placeholder="blur"
           blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-          sizes={isMobile ? "(max-width: 640px) 100vw" : "(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"}
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           onLoad={handleLoad}
         />
       </div>
