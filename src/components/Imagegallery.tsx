@@ -142,7 +142,7 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
   }), [])
 
   // Memoized image quality based on device
-  const imageQuality = useMemo(() => isMobile ? 40 : 70, [isMobile])
+  const imageQuality = useMemo(() => 100, []) // Full quality for modal
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
@@ -258,7 +258,7 @@ const ImageItem: React.FC<{
   const imageConfig = useMemo(() => ({
     width: isMobile ? 300 : 500,
     height: isMobile ? 200 : 300,
-    quality: isMobile ? 10 : 15  // Much lower quality for faster loading
+    quality: 30  // 30% quality for gallery images
   }), [isMobile])
 
   // Memoized size string

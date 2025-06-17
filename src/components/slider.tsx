@@ -186,19 +186,19 @@ const SlideContent = memo(({
         className="flex justify-between opacity-90 transition-opacity"
         style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
       >
-        <p className="text-lg md:text-3xl font-light text-[#828282] transition-all"
+        <p className="text-lg md:text-2xl font-extralight text-[#a6a6a6] transition-all"
           style={{
             filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
             transitionDuration: isMobile ? '150ms' : '200ms'
           }}
-        >
+        >   
           {image.type}
         </p>
 
         <a 
           href={image.src} 
           download={`${image.name.replace(/\s+/g, '_')}_${image.size[0]}x${image.size[1]}x${image.size[2]}.jpg`}
-          className="text-lg underline md:text-3xl font-light text-[#828282] transition-all"
+          className="text-lg underline md:text-2xl font-extralight text-[#a6a6a6] transition-all"
           style={{
             filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
             transitionDuration: isMobile ? '150ms' : '200ms'
