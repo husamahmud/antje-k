@@ -273,7 +273,7 @@ const ImageItem: React.FC<{
 
   // Memoized size string
   const sizeString = useMemo(() =>
-    `${image.size[0]}x${image.size[1]}x${image.size[2]}mm`,
+    `${image.size[0]}x${image.size[1]}x${image.size[2]}"`,
     [image.size]
   )
 

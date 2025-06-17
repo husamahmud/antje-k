@@ -44,7 +44,7 @@ const useResponsiveQuality = () => {
   }, [])
 
   return {
-    highQuality: isMobile ? 25 : 100,
+    highQuality: isMobile ? 40 : 80,
     lowQuality: isMobile ? 15 : 50,
     isMobile
   }
@@ -158,6 +158,10 @@ const SlideContent = memo(({
                 quality={highQuality}
                 priority={true}
                 unoptimized={false}
+                loading="eager"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                sizes={isMobile ? '100vw' : '(max-width: 640px) 100vw, (max-width: 768px) 90vw, 80vw'}
                 className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
                 style={{
                   transitionDuration: isMobile ? '200ms' : '300ms'
