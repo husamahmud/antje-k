@@ -44,7 +44,7 @@ const useResponsiveQuality = () => {
   }, [])
 
   return {
-    highQuality: isMobile ? 25 : 70,
+    highQuality: isMobile ? 25 : 100,
     lowQuality: isMobile ? 15 : 50,
     isMobile
   }
@@ -183,7 +183,7 @@ const SlideContent = memo(({
       </div>
 
       <div
-        className="flex justify-end opacity-90 transition-opacity"
+        className="flex justify-between opacity-90 transition-opacity"
         style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
       >
         <p className="text-lg md:text-3xl font-light text-[#828282] transition-all"
@@ -194,6 +194,18 @@ const SlideContent = memo(({
         >
           {image.type}
         </p>
+
+        <a 
+          href={image.src} 
+          download={`${image.name.replace(/\s+/g, '_')}_${image.size[0]}x${image.size[1]}x${image.size[2]}.jpg`}
+          className="text-lg underline md:text-3xl font-light text-[#828282] transition-all"
+          style={{
+            filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+            transitionDuration: isMobile ? '150ms' : '200ms'
+          }}
+        >
+          View Full Quality
+        </a>
       </div>
     </div>
   )
