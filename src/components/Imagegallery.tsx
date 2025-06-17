@@ -261,7 +261,7 @@ const ImageItem: React.FC<{
   const imageConfig = useMemo(() => ({
     width: isMobile ? 300 : 400,  // Reduced dimensions
     height: isMobile ? 180 : 240, // Reduced dimensions
-    quality: isPriority ? 15 : 5   // Much lower quality for thumbnails
+    quality: isPriority ? 40 : 5   // Much lower quality for thumbnails
   }), [isMobile, isPriority])
 
   // More aggressive sizes optimization
