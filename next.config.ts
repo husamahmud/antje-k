@@ -9,10 +9,6 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     minimumCacheTTL: 86400,
-    unoptimized: true,
-  },
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
   },
   compress: true,
 };

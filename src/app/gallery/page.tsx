@@ -22,7 +22,7 @@ async function getImages(): Promise<ImageData[]> {
       const [width, height, depth] = sizeStr.split(',').map((num) => Number.parseFloat(num))
       return {
         id: index + 1,
-        src: `/images/${file}`,
+        src: `/images/${encodeURIComponent(file)}`,
         name: name.replace(/[-_]/g, ' '),
         size: [width, height, depth] as [number, number, number],
       }
