@@ -339,7 +339,7 @@ const ImageItem: React.FC<{
       transition={{ duration: 0.05, ease: 'easeOut' }} // Faster transitions
     >
       {/* Aspect ratio container to prevent layout shift */}
-      <div className="relative w-full" style={{ aspectRatio: '5/3' }}>
+      <div className="relative w-full">
         {/* Simplified loading placeholder */}
         {isLoading && (
           <div className="absolute inset-0 bg-gray-100 rounded-lg" />
