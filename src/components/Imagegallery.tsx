@@ -104,7 +104,6 @@ const downloadImage = async (src: string, alt: string, id: number) => {
 const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo(({ image, onClose }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [hovering, setHovering] = useState(false)
-  const isMobile = useIsMobile()
 
   const handleLoad = useCallback(() => {
     setIsLoading(false)
