@@ -46,181 +46,181 @@ const useResponsiveQuality = () => {
   return {
     highQuality: isMobile ? 40 : 80,
     lowQuality: isMobile ? 15 : 50,
-    isMobile
+    isMobile,
   }
 }
 
 // Memoized slide component
-const SlideContent = memo(({
-  image,
-  index,
-  activeIndex,
-  hovering,
-  setHovering,
-  highQuality,
-  lowQuality,
-  isMobile,
-}: {
-  image: ImageData
-  index: number
-  activeIndex: number
-  hovering: boolean
-  setHovering: (hovering: boolean) => void
-  onSlideClick: (index: number) => void
-  highQuality: number
-  lowQuality: number
-  isMobile: boolean
-}) => {
-  const isActive = index === activeIndex
-  const shouldPreload = isMobile
-    ? Math.abs(index - activeIndex) <= 1
-    : Math.abs(index - activeIndex) <= 2
+const SlideContent = memo(
+  ({
+    image,
+    index,
+    activeIndex,
+    hovering,
+    setHovering,
+    highQuality,
+    lowQuality,
+    isMobile,
+  }: {
+    image: ImageData
+    index: number
+    activeIndex: number
+    hovering: boolean
+    setHovering: (hovering: boolean) => void
+    onSlideClick: (index: number) => void
+    highQuality: number
+    lowQuality: number
+    isMobile: boolean
+  }) => {
+    const isActive = index === activeIndex
+    const shouldPreload = isMobile ? Math.abs(index - activeIndex) <= 1 : Math.abs(index - activeIndex) <= 2
 
-  return (
-    <div
-      className="mx-auto flex h-full w-fit transform flex-col gap-8 overflow-visible transition-all ease-out"
-      style={{
-        transitionDuration: isMobile ? '200ms' : '300ms',
-        willChange: isActive ? 'transform' : 'auto'
-      }}
-    >
+    return (
       <div
-        className="flex items-center justify-between opacity-90 transition-opacity"
-        style={{
-          filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
-          transitionDuration: isMobile ? '150ms' : '200ms'
-        }}
-      >
-        <p className="text-lg md:text-3xl font-bold text-[#1F1E13] transition-all"
-          style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
-        >
-          {image.name}
-        </p>
-        <p className="text-lg md:text-3xl font-light text-[#1F1E13] transition-all"
-          style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
-        >
-          {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]}{' '}
-          <span className="text-[#828282]">&quot;</span>
-        </p>
-      </div>
-
-      <div
-        className={`transform overflow-visible transition-all ease-out ${!isMobile ? 'hover:scale-[1.02]' : ''}`}
+        className="mx-auto flex h-full w-fit transform flex-col gap-8 overflow-visible transition-all ease-out"
         style={{
           transitionDuration: isMobile ? '200ms' : '300ms',
-          willChange: 'transform'
+          willChange: isActive ? 'transform' : 'auto',
         }}
       >
-        <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible p-4 md:h-[550px] md:p-6">
-          {/* Preload image for nearby slides */}
-          <Image
-            src={image.src || '/placeholder.svg'}
-            alt=""
-            width={isMobile ? 800 : 1067}
-            height={isMobile ? 400 : 540}
-            quality={shouldPreload ? highQuality : lowQuality}
-            priority={index <= 2}
-            unoptimized={false}
-            className="absolute opacity-0 pointer-events-none"
-            style={{ zIndex: -1 }}
-          />
-
-          {/* Background blur image - always rendered for active slides */}
-          <Image
-            src={image.src || '/placeholder.svg'}
-            alt=""
-            width={isMobile ? 800 : 1067}
-            height={isMobile ? 400 : 540}
-            quality={highQuality}
-            priority={index <= 2}
-            unoptimized={false}
-            className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all ease-out md:max-h-[550]"
-            style={{
-              opacity: isActive ? 0.8 : 0,
-              filter: isActive
-                ? (isMobile ? 'blur(10px) saturate(1.3)' : 'blur(15px) saturate(1.6)')
-                : 'none',
-              zIndex: 0,
-              transitionDuration: isMobile ? '200ms' : '300ms',
-              willChange: 'opacity, filter'
-            }}
-          />
-
-          {/* Main image - always rendered, controlled by opacity */}
-          <div
-            className="relative z-10"
-            style={{
-              opacity: isActive ? 1 : 0.7,
-              transitionDuration: isMobile ? '200ms' : '300ms',
-              willChange: 'opacity'
-            }}
+        <div
+          className="flex items-center justify-between opacity-90 transition-opacity"
+          style={{
+            filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+            transitionDuration: isMobile ? '150ms' : '200ms',
+          }}
+        >
+          <p
+            className="text-lg font-bold text-[#1F1E13] transition-all md:text-3xl"
+            style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
           >
-            {isActive ? (
-              <Lens
-                hovering={hovering}
-                setHovering={setHovering}
-              >
+            {image.name}
+          </p>
+          <p
+            className="text-lg font-light text-[#1F1E13] transition-all md:text-3xl"
+            style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
+          >
+            {image.size[0]} <X /> {image.size[1]} <X /> {image.size[2]} <span className="text-[#828282]">&quot;</span>
+          </p>
+        </div>
+
+        <div
+          className={`transform overflow-visible transition-all ease-out ${!isMobile ? 'hover:scale-[1.02]' : ''}`}
+          style={{
+            transitionDuration: isMobile ? '200ms' : '300ms',
+            willChange: 'transform',
+          }}
+        >
+          <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible p-4 md:h-[550px] md:p-6">
+            {/* Preload image for nearby slides */}
+            <Image
+              src={image.src || '/placeholder.svg'}
+              alt=""
+              width={isMobile ? 800 : 1067}
+              height={isMobile ? 400 : 540}
+              quality={shouldPreload ? highQuality : lowQuality}
+              priority={index <= 2}
+              unoptimized={false}
+              className="pointer-events-none absolute opacity-0"
+              style={{ zIndex: -1 }}
+            />
+
+            {/* Background blur image - always rendered for active slides */}
+            <Image
+              src={image.src || '/placeholder.svg'}
+              alt=""
+              width={isMobile ? 800 : 1067}
+              height={isMobile ? 400 : 540}
+              quality={highQuality}
+              priority={index <= 2}
+              unoptimized={false}
+              className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain shadow-xl transition-all ease-out md:max-h-[550]"
+              style={{
+                opacity: isActive ? 0.8 : 0,
+                filter: isActive ? (isMobile ? 'blur(3px) saturate(1)' : 'blur(15px) saturate(1.6)') : 'none',
+                zIndex: 0,
+                transitionDuration: isMobile ? '200ms' : '300ms',
+                willChange: 'opacity, filter',
+              }}
+            />
+
+            {/* Main image - always rendered, controlled by opacity */}
+            <div
+              className="relative z-10"
+              style={{
+                opacity: isActive ? 1 : 0.7,
+                transitionDuration: isMobile ? '200ms' : '300ms',
+                willChange: 'opacity',
+              }}
+            >
+              {isActive ? (
+                <Lens
+                  hovering={hovering}
+                  setHovering={setHovering}
+                >
+                  <Image
+                    src={image.src || '/placeholder.svg'}
+                    alt={image.name}
+                    width={1200}
+                    height={1200}
+                    quality={100}
+                    priority={index <= 2}
+                    loading={index <= 2 ? 'eager' : 'lazy'}
+                    className="aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
+                    style={{
+                      transitionDuration: isMobile ? '200ms' : '300ms',
+                    }}
+                  />
+                </Lens>
+              ) : (
                 <Image
                   src={image.src || '/placeholder.svg'}
                   alt={image.name}
-                  width={1200}
-                  height={1200}
-                  quality={100}
+                  width={isMobile ? 800 : 1067}
+                  height={isMobile ? 400 : 540}
+                  quality={highQuality}
                   priority={index <= 2}
-                  loading={index <= 2 ? "eager" : "lazy"}
                   className="aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
                   style={{
-                    transitionDuration: isMobile ? '200ms' : '300ms'
+                    filter: isMobile ? 'blur(2px) saturate(1.1)' : 'blur(4px) saturate(1.2)',
+                    transitionDuration: isMobile ? '200ms' : '300ms',
                   }}
                 />
-              </Lens>
-            ) : (
-              <Image
-                src={image.src || '/placeholder.svg'}
-                alt={image.name}
-                width={isMobile ? 800 : 1067}
-                height={isMobile ? 400 : 540}
-                quality={highQuality}
-                priority={index <= 2}
-                className="aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
-                style={{
-                  filter: isMobile ? 'blur(2px) saturate(1.1)' : 'blur(4px) saturate(1.2)',
-                  transitionDuration: isMobile ? '200ms' : '300ms'
-                }}
-              />
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        className="flex justify-between opacity-90 transition-opacity"
-        style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
-      >
-        <p className="text-lg md:text-2xl font-extralight text-[#a6a6a6] transition-all"
-          style={{
-            filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
-            transitionDuration: isMobile ? '150ms' : '200ms'
-          }}
+        <div
+          className="flex justify-between opacity-90 transition-opacity"
+          style={{ transitionDuration: isMobile ? '150ms' : '200ms' }}
         >
-          {image.type}
-        </p>
+          <p
+            className="text-lg font-extralight text-[#a6a6a6] transition-all md:text-2xl"
+            style={{
+              filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+              transitionDuration: isMobile ? '150ms' : '200ms',
+            }}
+          >
+            {image.type}
+          </p>
 
-        <a
-          href={image.src}
-          download={`${image.name.replace(/\s+/g, '_')}_${image.size[0]}x${image.size[1]}x${image.size[2]}.jpg`}
-          className="text-lg underline md:text-2xl font-extralight text-[#a6a6a6] transition-all"
-          style={{
-            filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
-            transitionDuration: isMobile ? '150ms' : '200ms'
-          }}
-        >
-          View Full Quality
-        </a>
+          <a
+            href={image.src}
+            download={`${image.name.replace(/\s+/g, '_')}_${image.size[0]}x${image.size[1]}x${image.size[2]}.jpg`}
+            className="text-lg font-extralight text-[#a6a6a6] underline transition-all md:text-2xl"
+            style={{
+              filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
+              transitionDuration: isMobile ? '150ms' : '200ms',
+            }}
+          >
+            View Full Quality
+          </a>
+        </div>
       </div>
-    </div>
-  )
-})
+    )
+  }
+)
 SlideContent.displayName = 'SlideContent'
 
 export const Slider = memo(({ images }: SliderProps) => {
@@ -229,11 +229,14 @@ export const Slider = memo(({ images }: SliderProps) => {
   const swiperRef = useRef<SwiperType | null>(null)
   const { highQuality, lowQuality, isMobile } = useResponsiveQuality()
 
-  const handleSlideClick = useCallback((index: number) => {
-    if (index !== activeIndex && swiperRef.current) {
-      swiperRef.current.slideTo(index)
-    }
-  }, [activeIndex])
+  const handleSlideClick = useCallback(
+    (index: number) => {
+      if (index !== activeIndex && swiperRef.current) {
+        swiperRef.current.slideTo(index)
+      }
+    },
+    [activeIndex]
+  )
 
   const handleSlideChange = useCallback((swiper: SwiperType) => {
     setActiveIndex(swiper.realIndex)
@@ -244,62 +247,67 @@ export const Slider = memo(({ images }: SliderProps) => {
   }, [])
 
   // Memoize swiper configuration with mobile optimizations
-  const swiperConfig = useMemo(() => ({
-    modules: [Pagination, EffectCoverflow],
-    spaceBetween: isMobile ? 5 : 10,
-    className: "w-svw pb-16 overflow-visible",
-    slidesPerView: 1.3 as const,
-    centeredSlides: true,
-    speed: isMobile ? 300 : 500,
-    effect: "coverflow" as const,
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 0,
-      depth: isMobile ? 50 : 100,
-      modifier: isMobile ? 1 : 2,
-      slideShadows: false,
-    },
-    breakpoints: {
-      640: {
-        slidesPerView: 1.4,
-        spaceBetween: 40,
+  const swiperConfig = useMemo(
+    () => ({
+      modules: [Pagination, EffectCoverflow],
+      spaceBetween: isMobile ? 5 : 10,
+      className: 'w-svw pb-16 overflow-visible',
+      slidesPerView: 1.3 as const,
+      centeredSlides: true,
+      speed: isMobile ? 300 : 500,
+      effect: 'coverflow' as const,
+      coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: isMobile ? 50 : 100,
+        modifier: isMobile ? 1 : 2,
+        slideShadows: false,
       },
-      768: {
-        slidesPerView: 1.4,
-        spaceBetween: 45,
+      breakpoints: {
+        640: {
+          slidesPerView: 1.4,
+          spaceBetween: 40,
+        },
+        768: {
+          slidesPerView: 1.4,
+          spaceBetween: 45,
+        },
+        1024: {
+          slidesPerView: 2,
+          spaceBetween: 40,
+        },
       },
-      1024: {
-        slidesPerView: 2,
-        spaceBetween: 40,
-      },
-    }
-  }), [isMobile])
+    }),
+    [isMobile]
+  )
 
   // Memoize slides
-  const slides = useMemo(() =>
-    images.map((image, index) => (
-      <SwiperSlide
-        key={image.src}
-        className="mr-0 overflow-visible transition-all ease-out"
-        onClick={() => handleSlideClick(index)}
-        style={{
-          cursor: index !== activeIndex ? 'pointer' : 'default',
-          transitionDuration: isMobile ? '200ms' : '300ms'
-        }}
-      >
-        <SlideContent
-          image={image}
-          index={index}
-          activeIndex={activeIndex}
-          hovering={hovering}
-          setHovering={setHovering}
-          onSlideClick={handleSlideClick}
-          highQuality={highQuality}
-          lowQuality={lowQuality}
-          isMobile={isMobile}
-        />
-      </SwiperSlide>
-    )), [images, activeIndex, hovering, setHovering, handleSlideClick, highQuality, lowQuality, isMobile]
+  const slides = useMemo(
+    () =>
+      images.map((image, index) => (
+        <SwiperSlide
+          key={image.src}
+          className="mr-0 overflow-visible transition-all ease-out"
+          onClick={() => handleSlideClick(index)}
+          style={{
+            cursor: index !== activeIndex ? 'pointer' : 'default',
+            transitionDuration: isMobile ? '200ms' : '300ms',
+          }}
+        >
+          <SlideContent
+            image={image}
+            index={index}
+            activeIndex={activeIndex}
+            hovering={hovering}
+            setHovering={setHovering}
+            onSlideClick={handleSlideClick}
+            highQuality={highQuality}
+            lowQuality={lowQuality}
+            isMobile={isMobile}
+          />
+        </SwiperSlide>
+      )),
+    [images, activeIndex, hovering, setHovering, handleSlideClick, highQuality, lowQuality, isMobile]
   )
 
   return (
@@ -310,9 +318,7 @@ export const Slider = memo(({ images }: SliderProps) => {
           onSlideChange={handleSlideChange}
           onSwiper={handleSwiper}
         >
-          <div className="w-full overflow-visible">
-            {slides}
-          </div>
+          <div className="w-full overflow-visible">{slides}</div>
         </Swiper>
       </div>
 
