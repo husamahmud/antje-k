@@ -153,9 +153,9 @@ const SlideContent = memo(({
               <Image
                 src={image.src || '/placeholder.svg'}
                 alt={image.name}
-                width={isMobile ? 800 : 1067}
-                height={isMobile ? 400 : 540}
-                quality={80}
+                width={1200}
+                height={1200}
+                quality={100}
                 priority={true}
                 loading="eager"
                 placeholder="blur"
