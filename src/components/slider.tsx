@@ -112,75 +112,84 @@ const SlideContent = memo(({
         }}
       >
         <div className="relative mx-auto flex h-[350px] w-fit items-center justify-center overflow-visible p-4 md:h-[550px] md:p-6">
-          {shouldPreload && !isActive && (
-            <Image
-              src={image.src || '/placeholder.svg'}
-              alt=""
-              width={isMobile ? 800 : 1067}
-              height={isMobile ? 400 : 540}
-              quality={isMobile ? 20 : highQuality}
-              priority={index <= 1}
-              unoptimized={false}
-              className="absolute opacity-0 pointer-events-none"
-              style={{ zIndex: -1 }}
-            />
-          )}
+          {/* Preload image for nearby slides */}
+          <Image
+            src={image.src || '/placeholder.svg'}
+            alt=""
+            width={isMobile ? 800 : 1067}
+            height={isMobile ? 400 : 540}
+            quality={shouldPreload ? highQuality : lowQuality}
+            priority={index <= 2}
+            unoptimized={false}
+            className="absolute opacity-0 pointer-events-none"
+            style={{ zIndex: -1 }}
+          />
 
-          {isActive && (
-            <Image
-              src={image.src || '/placeholder.svg'}
-              alt=""
-              width={isMobile ? 800 : 1067}
-              height={isMobile ? 400 : 540}
-              quality={highQuality}
-              priority={true}
-              unoptimized={false}
-              className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain opacity-80 blur-xl transition-all ease-out md:max-h-[550]"
-              style={{
-                filter: isMobile ? 'blur(10px) saturate(1.3)' : 'blur(15px) saturate(1.6)',
-                zIndex: 0,
-                transitionDuration: isMobile ? '200ms' : '300ms',
-                willChange: 'filter'
-              }}
-            />
-          )}
+          {/* Background blur image - always rendered for active slides */}
+          <Image
+            src={image.src || '/placeholder.svg'}
+            alt=""
+            width={isMobile ? 800 : 1067}
+            height={isMobile ? 400 : 540}
+            quality={highQuality}
+            priority={index <= 2}
+            unoptimized={false}
+            className="absolute top-1/2 left-1/2 shadow-xl aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 object-contain transition-all ease-out md:max-h-[550]"
+            style={{
+              opacity: isActive ? 0.8 : 0,
+              filter: isActive
+                ? (isMobile ? 'blur(10px) saturate(1.3)' : 'blur(15px) saturate(1.6)')
+                : 'none',
+              zIndex: 0,
+              transitionDuration: isMobile ? '200ms' : '300ms',
+              willChange: 'opacity, filter'
+            }}
+          />
 
-          {isActive ? (
-            <Lens
-              hovering={hovering}
-              setHovering={setHovering}
-            >
+          {/* Main image - always rendered, controlled by opacity */}
+          <div
+            className="relative z-10"
+            style={{
+              opacity: isActive ? 1 : 0.7,
+              transitionDuration: isMobile ? '200ms' : '300ms',
+              willChange: 'opacity'
+            }}
+          >
+            {isActive ? (
+              <Lens
+                hovering={hovering}
+                setHovering={setHovering}
+              >
+                <Image
+                  src={image.src || '/placeholder.svg'}
+                  alt={image.name}
+                  width={1200}
+                  height={1200}
+                  quality={100}
+                  priority={index <= 2}
+                  loading={index <= 2 ? "eager" : "lazy"}
+                  className="aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
+                  style={{
+                    transitionDuration: isMobile ? '200ms' : '300ms'
+                  }}
+                />
+              </Lens>
+            ) : (
               <Image
                 src={image.src || '/placeholder.svg'}
                 alt={image.name}
-                width={1200}
-                height={1200}
-                quality={100}
-                priority={true}
-                loading="eager"
-                // placeholder="blur"
-                // blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
+                width={isMobile ? 800 : 1067}
+                height={isMobile ? 400 : 540}
+                quality={highQuality}
+                priority={index <= 2}
+                className="aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
                 style={{
+                  filter: isMobile ? 'blur(2px) saturate(1.1)' : 'blur(4px) saturate(1.2)',
                   transitionDuration: isMobile ? '200ms' : '300ms'
                 }}
               />
-            </Lens>
-          ) : (
-            <Image
-              src={image.src || '/placeholder.svg'}
-              alt={image.name}
-              width={isMobile ? 800 : 1067}
-              height={isMobile ? 400 : 540}
-              quality={lowQuality}
-              priority={index <= 1}
-              className="aspect-square max-h-[350px] opacity-70 w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
-              style={{
-                filter: isMobile ? 'blur(2px) saturate(1.1)' : 'blur(4px) saturate(1.2)',
-                transitionDuration: isMobile ? '200ms' : '300ms'
-              }}
-            />
-          )}
+            )}
+          </div>
         </div>
       </div>
 
