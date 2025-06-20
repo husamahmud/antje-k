@@ -134,7 +134,7 @@ const SlideContent = memo(
               quality={highQuality}
               priority={index <= 2}
               unoptimized={false}
-              className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 scale-92 object-contain shadow-xl transition-all ease-out md:max-h-[550] md:scale-100"
+              className="absolute top-1/2 left-1/2 aspect-square max-h-[350px] w-fit max-w-full -translate-x-1/2 -translate-y-1/2 scale-95 object-contain transition-all ease-out md:max-h-[550] md:scale-100"
               style={{
                 opacity: isActive ? 0.8 : 0,
                 filter: isActive ? (isMobile ? 'blur(3px) saturate(1)' : 'blur(15px) saturate(1.6)') : 'none',
