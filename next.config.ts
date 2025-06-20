@@ -8,9 +8,8 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    minimumCacheTTL: 86400,
+    minimumCacheTTL: 86400, // 1 day
   },
-  compress: true,
 };
 
 export default nextConfig;

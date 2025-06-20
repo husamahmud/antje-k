@@ -155,13 +155,11 @@ const SlideContent = memo(({
                 alt={image.name}
                 width={isMobile ? 800 : 1067}
                 height={isMobile ? 400 : 540}
-                quality={highQuality}
+                quality={30}
                 priority={true}
-                unoptimized={false}
                 loading="eager"
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                sizes={isMobile ? '100vw' : '(max-width: 640px) 100vw, (max-width: 768px) 90vw, 80vw'}
                 className="z-10 aspect-square max-h-[350px] w-fit max-w-full object-contain transition-all ease-out md:max-h-[550]"
                 style={{
                   transitionDuration: isMobile ? '200ms' : '300ms'
@@ -195,12 +193,12 @@ const SlideContent = memo(({
             filter: !isActive ? (isMobile ? 'blur(2px)' : 'blur(4px) saturate(1.2)') : 'none',
             transitionDuration: isMobile ? '150ms' : '200ms'
           }}
-        >   
+        >
           {image.type}
         </p>
 
-        <a 
-          href={image.src} 
+        <a
+          href={image.src}
           download={`${image.name.replace(/\s+/g, '_')}_${image.size[0]}x${image.size[1]}x${image.size[2]}.jpg`}
           className="text-lg underline md:text-2xl font-extralight text-[#a6a6a6] transition-all"
           style={{

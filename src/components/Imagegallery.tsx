@@ -140,9 +140,6 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
     animate: { opacity: 1 }
   }), [])
 
-  // Optimized image quality for modal - high quality since it's the focus
-  const imageQuality = useMemo(() => 90, []) // Reduced from 100 to 90 for faster loading
-
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
@@ -215,10 +212,8 @@ const Modal: React.FC<{ image: GalleryImage; onClose: () => void }> = React.memo
                 width={1200}
                 height={1200}
                 className="max-h-[90vh] max-w-full object-contain"
+                quality={100}
                 priority
-                quality={imageQuality}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                unoptimized={false}
                 onLoad={handleLoad}
               />
             </Lens>
