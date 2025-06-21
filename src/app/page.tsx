@@ -20,13 +20,14 @@ async function getImages(): Promise<ImageData[]> {
 
   const images: ImageData[] = files
     .map((file) => {
+      // New format: 1_Abstract-Flow_Acrylic-on-Canvas_24,18,1.5.jpg
       const [, name, type, sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
       const [width, height, depth] = sizeStr.split(',').map((num) => Number.parseFloat(num))
       return {
         src: `/images/${file}`,
-        name,
+        name: name.replace(/-/g, ' '), // Convert hyphens back to spaces for display
         size: [width, height, depth] as [number, number, number],
-        type,
+        type: type.replace(/-/g, ' '), // Convert hyphens back to spaces for display
       }
     })
     .sort((a, b) => {

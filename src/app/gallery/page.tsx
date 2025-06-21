@@ -7,6 +7,7 @@ type ImageData = {
   src: string
   name: string
   size: [number, number, number]
+  type: string
 }
 
 // Server-side data fetching
@@ -18,13 +19,15 @@ async function getImages(): Promise<ImageData[]> {
 
   const images: ImageData[] = files
     .map((file, index) => {
-      const [, name, , sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
+      // New format: 1_Abstract-Flow_Acrylic-on-Canvas_24,18,1.5.jpg
+      const [, name, type, sizeStr] = file.replace(/\.(png|jpg|jpeg)$/, '').split('_')
       const [width, height, depth] = sizeStr.split(',').map((num) => Number.parseFloat(num))
       return {
         id: index + 1,
         src: `/images/${encodeURIComponent(file)}`,
-        name: name.replace(/[-_]/g, ' '),
+        name: name.replace(/-/g, ' '), // Convert hyphens back to spaces for display
         size: [width, height, depth] as [number, number, number],
+        type: type.replace(/-/g, ' '), // Convert hyphens back to spaces for display
       }
     })
 
