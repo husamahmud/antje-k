@@ -288,7 +288,7 @@ const ImageItem: React.FC<{
           <NextImage
             src={image.src}
             alt={image.alt}
-            className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'
+            className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-500 ease-in-out ${isLoading ? 'opacity-0' : 'opacity-100'
               }`}
             width={imageConfig.width}
             height={imageConfig.height}
@@ -329,7 +329,7 @@ const ImageItem: React.FC<{
       variants={itemVariants}
       whileHover="hover"
       whileTap="tap"
-      transition={{ duration: 0.05, ease: 'easeOut' }} // Faster transitions
+      transition={{ duration: 0.22, ease: 'easeInOut' }} // Smoother and longer, ease in out
     >
       {/* Aspect ratio container to prevent layout shift */}
       <div className="relative w-full">
@@ -341,7 +341,7 @@ const ImageItem: React.FC<{
         <NextImage
           src={image.src}
           alt={image.alt}
-          className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] ${isLoading ? 'opacity-0' : 'opacity-100'
+          className={`object-contain shadow-[6px_6px_14px_0px_#0000004f] transition-opacity duration-500 ease-in-out ${isLoading ? 'opacity-0' : 'opacity-100'
             }`}
           width={imageConfig.width}
           height={imageConfig.height}
@@ -355,8 +355,8 @@ const ImageItem: React.FC<{
         />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-75 group-hover:opacity-70" />
-      <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-75 group-hover:opacity-100">
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-70" />
+      <div className="absolute bottom-4 left-1/2 flex w-full px-5 -translate-x-1/2 justify-between text-lg text-white opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
         <p className="font-semibold">{image.description}</p>
         <p className="font-semibold">{sizeString}</p>
       </div>
